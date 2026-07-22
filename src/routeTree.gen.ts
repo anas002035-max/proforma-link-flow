@@ -9,38 +9,171 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ExpiredRouteImport } from './routes/expired'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as BSlugRouteImport } from './routes/b.$slug'
+import { Route as AuthenticatedLinksRouteImport } from './routes/_authenticated/links'
+import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedBioRouteImport } from './routes/_authenticated/bio'
+import { Route as AuthenticatedLinksIdRouteImport } from './routes/_authenticated/links.$id'
+import { Route as ApiPublicRSlugRouteImport } from './routes/api/public/r.$slug'
 
+const ExpiredRoute = ExpiredRouteImport.update({
+  id: '/expired',
+  path: '/expired',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BSlugRoute = BSlugRouteImport.update({
+  id: '/b/$slug',
+  path: '/b/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedLinksRoute = AuthenticatedLinksRouteImport.update({
+  id: '/links',
+  path: '/links',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedBioRoute = AuthenticatedBioRouteImport.update({
+  id: '/bio',
+  path: '/bio',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedLinksIdRoute = AuthenticatedLinksIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => AuthenticatedLinksRoute,
+} as any)
+const ApiPublicRSlugRoute = ApiPublicRSlugRouteImport.update({
+  id: '/api/public/r/$slug',
+  path: '/api/public/r/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/expired': typeof ExpiredRoute
+  '/bio': typeof AuthenticatedBioRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
+  '/links': typeof AuthenticatedLinksRouteWithChildren
+  '/b/$slug': typeof BSlugRoute
+  '/links/$id': typeof AuthenticatedLinksIdRoute
+  '/api/public/r/$slug': typeof ApiPublicRSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/expired': typeof ExpiredRoute
+  '/bio': typeof AuthenticatedBioRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
+  '/links': typeof AuthenticatedLinksRouteWithChildren
+  '/b/$slug': typeof BSlugRoute
+  '/links/$id': typeof AuthenticatedLinksIdRoute
+  '/api/public/r/$slug': typeof ApiPublicRSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/auth': typeof AuthRoute
+  '/expired': typeof ExpiredRoute
+  '/_authenticated/bio': typeof AuthenticatedBioRoute
+  '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/links': typeof AuthenticatedLinksRouteWithChildren
+  '/b/$slug': typeof BSlugRoute
+  '/_authenticated/links/$id': typeof AuthenticatedLinksIdRoute
+  '/api/public/r/$slug': typeof ApiPublicRSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/expired'
+    | '/bio'
+    | '/dashboard'
+    | '/links'
+    | '/b/$slug'
+    | '/links/$id'
+    | '/api/public/r/$slug'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/auth'
+    | '/expired'
+    | '/bio'
+    | '/dashboard'
+    | '/links'
+    | '/b/$slug'
+    | '/links/$id'
+    | '/api/public/r/$slug'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authenticated'
+    | '/auth'
+    | '/expired'
+    | '/_authenticated/bio'
+    | '/_authenticated/dashboard'
+    | '/_authenticated/links'
+    | '/b/$slug'
+    | '/_authenticated/links/$id'
+    | '/api/public/r/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AuthRoute: typeof AuthRoute
+  ExpiredRoute: typeof ExpiredRoute
+  BSlugRoute: typeof BSlugRoute
+  ApiPublicRSlugRoute: typeof ApiPublicRSlugRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/expired': {
+      id: '/expired'
+      path: '/expired'
+      fullPath: '/expired'
+      preLoaderRoute: typeof ExpiredRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,11 +181,84 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/b/$slug': {
+      id: '/b/$slug'
+      path: '/b/$slug'
+      fullPath: '/b/$slug'
+      preLoaderRoute: typeof BSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/links': {
+      id: '/_authenticated/links'
+      path: '/links'
+      fullPath: '/links'
+      preLoaderRoute: typeof AuthenticatedLinksRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/dashboard': {
+      id: '/_authenticated/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AuthenticatedDashboardRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/bio': {
+      id: '/_authenticated/bio'
+      path: '/bio'
+      fullPath: '/bio'
+      preLoaderRoute: typeof AuthenticatedBioRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/links/$id': {
+      id: '/_authenticated/links/$id'
+      path: '/$id'
+      fullPath: '/links/$id'
+      preLoaderRoute: typeof AuthenticatedLinksIdRouteImport
+      parentRoute: typeof AuthenticatedLinksRoute
+    }
+    '/api/public/r/$slug': {
+      id: '/api/public/r/$slug'
+      path: '/api/public/r/$slug'
+      fullPath: '/api/public/r/$slug'
+      preLoaderRoute: typeof ApiPublicRSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
+interface AuthenticatedLinksRouteChildren {
+  AuthenticatedLinksIdRoute: typeof AuthenticatedLinksIdRoute
+}
+
+const AuthenticatedLinksRouteChildren: AuthenticatedLinksRouteChildren = {
+  AuthenticatedLinksIdRoute: AuthenticatedLinksIdRoute,
+}
+
+const AuthenticatedLinksRouteWithChildren =
+  AuthenticatedLinksRoute._addFileChildren(AuthenticatedLinksRouteChildren)
+
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedBioRoute: typeof AuthenticatedBioRoute
+  AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedLinksRoute: typeof AuthenticatedLinksRouteWithChildren
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedBioRoute: AuthenticatedBioRoute,
+  AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedLinksRoute: AuthenticatedLinksRouteWithChildren,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AuthRoute: AuthRoute,
+  ExpiredRoute: ExpiredRoute,
+  BSlugRoute: BSlugRoute,
+  ApiPublicRSlugRoute: ApiPublicRSlugRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
