@@ -14,7 +14,219 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      analytics_logs: {
+        Row: {
+          country: string | null
+          device_type: string | null
+          id: number
+          link_id: string
+          os: string | null
+          referrer: string | null
+          timestamp: string
+        }
+        Insert: {
+          country?: string | null
+          device_type?: string | null
+          id?: number
+          link_id: string
+          os?: string | null
+          referrer?: string | null
+          timestamp?: string
+        }
+        Update: {
+          country?: string | null
+          device_type?: string | null
+          id?: number
+          link_id?: string
+          os?: string | null
+          referrer?: string | null
+          timestamp?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "analytics_logs_link_id_fkey"
+            columns: ["link_id"]
+            isOneToOne: false
+            referencedRelation: "smart_links"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      bio_blocks: {
+        Row: {
+          block_type: string
+          created_at: string
+          data: Json
+          id: string
+          page_id: string
+          position: number
+        }
+        Insert: {
+          block_type: string
+          created_at?: string
+          data?: Json
+          id?: string
+          page_id: string
+          position?: number
+        }
+        Update: {
+          block_type?: string
+          created_at?: string
+          data?: Json
+          id?: string
+          page_id?: string
+          position?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bio_blocks_page_id_fkey"
+            columns: ["page_id"]
+            isOneToOne: false
+            referencedRelation: "bio_pages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      bio_pages: {
+        Row: {
+          avatar_url: string | null
+          bio: string | null
+          created_at: string
+          display_name: string | null
+          id: string
+          slug: string
+          theme: Json
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          slug: string
+          theme?: Json
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          slug?: string
+          theme?: Json
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          display_name: string | null
+          email: string | null
+          id: string
+          subscription_status: Database["public"]["Enums"]["subscription_tier"]
+          updated_at: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          display_name?: string | null
+          email?: string | null
+          id: string
+          subscription_status?: Database["public"]["Enums"]["subscription_tier"]
+          updated_at?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          display_name?: string | null
+          email?: string | null
+          id?: string
+          subscription_status?: Database["public"]["Enums"]["subscription_tier"]
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      qr_codes: {
+        Row: {
+          created_at: string
+          id: string
+          link_id: string
+          qr_style_settings: Json
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          link_id: string
+          qr_style_settings?: Json
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          link_id?: string
+          qr_style_settings?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: "qr_codes_link_id_fkey"
+            columns: ["link_id"]
+            isOneToOne: false
+            referencedRelation: "smart_links"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      smart_links: {
+        Row: {
+          created_at: string
+          deep_link_enabled: boolean
+          default_url: string
+          expires_at: string | null
+          geo_rules: Json
+          id: string
+          is_active: boolean
+          password_hash: string | null
+          slug: string
+          title: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          deep_link_enabled?: boolean
+          default_url: string
+          expires_at?: string | null
+          geo_rules?: Json
+          id?: string
+          is_active?: boolean
+          password_hash?: string | null
+          slug: string
+          title?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          deep_link_enabled?: boolean
+          default_url?: string
+          expires_at?: string | null
+          geo_rules?: Json
+          id?: string
+          is_active?: boolean
+          password_hash?: string | null
+          slug?: string
+          title?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -23,7 +235,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      subscription_tier: "free" | "pro_early" | "pro"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +362,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      subscription_tier: ["free", "pro_early", "pro"],
+    },
   },
 } as const
