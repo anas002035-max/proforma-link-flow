@@ -76,6 +76,21 @@ function LinkDetail() {
             </div>
           </div>
 
+          <div className="mt-6 grid grid-cols-3 gap-2">
+            <MiniStat label="Clicks" value={data.analytics.length} />
+            <MiniStat label="Countries" value={new Set(data.analytics.map((a) => a.country).filter(Boolean)).size} />
+            <MiniStat label="Mobile" value={`${data.analytics.length ? Math.round(100 * data.analytics.filter((a) => a.device_type === "mobile").length / data.analytics.length) : 0}%`} />
+          </div>
+
+          <h2 className="mt-8 text-lg font-semibold">Daily traffic</h2>
+          <div className="mt-3"><TrafficLineChart logs={data.analytics as any} /></div>
+
+          <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-3">
+            <BreakdownPie logs={data.analytics as any} kind="country" title="Countries" />
+            <BreakdownPie logs={data.analytics as any} kind="device_type" title="Devices" />
+            <BreakdownPie logs={data.analytics as any} kind="os" title="OS" />
+          </div>
+
           <h2 className="mt-8 text-lg font-semibold">Recent clicks</h2>
           {data.analytics.length === 0 ? (
             <p className="mt-2 text-sm text-muted-foreground">No clicks yet.</p>
@@ -98,6 +113,15 @@ function LinkDetail() {
           )}
         </div>
       </div>
+    </div>
+  );
+}
+
+function MiniStat({ label, value }: { label: string; value: number | string }) {
+  return (
+    <div className="rounded-lg border border-border bg-surface/50 p-3">
+      <div className="flex items-center gap-1 text-[10px] uppercase tracking-wider text-muted-foreground"><MousePointerClick className="h-3 w-3" />{label}</div>
+      <div className="mt-1 text-xl font-black text-[color:var(--neon-blue)]">{value}</div>
     </div>
   );
 }
