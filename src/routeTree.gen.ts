@@ -14,9 +14,14 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as BSlugRouteImport } from './routes/b.$slug'
+import { Route as AuthenticatedSeoRouteImport } from './routes/_authenticated/seo'
+import { Route as AuthenticatedQrRouteImport } from './routes/_authenticated/qr'
 import { Route as AuthenticatedLinksRouteImport } from './routes/_authenticated/links'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedCalculatorsRouteImport } from './routes/_authenticated/calculators'
 import { Route as AuthenticatedBioRouteImport } from './routes/_authenticated/bio'
+import { Route as AuthenticatedBillingRouteImport } from './routes/_authenticated/billing'
+import { Route as AuthenticatedAnalyticsRouteImport } from './routes/_authenticated/analytics'
 import { Route as AuthenticatedLinksIdRouteImport } from './routes/_authenticated/links.$id'
 import { Route as ApiPublicRSlugRouteImport } from './routes/api/public/r.$slug'
 
@@ -44,6 +49,16 @@ const BSlugRoute = BSlugRouteImport.update({
   path: '/b/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedSeoRoute = AuthenticatedSeoRouteImport.update({
+  id: '/seo',
+  path: '/seo',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedQrRoute = AuthenticatedQrRouteImport.update({
+  id: '/qr',
+  path: '/qr',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedLinksRoute = AuthenticatedLinksRouteImport.update({
   id: '/links',
   path: '/links',
@@ -54,9 +69,25 @@ const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedCalculatorsRoute =
+  AuthenticatedCalculatorsRouteImport.update({
+    id: '/calculators',
+    path: '/calculators',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedBioRoute = AuthenticatedBioRouteImport.update({
   id: '/bio',
   path: '/bio',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedBillingRoute = AuthenticatedBillingRouteImport.update({
+  id: '/billing',
+  path: '/billing',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedAnalyticsRoute = AuthenticatedAnalyticsRouteImport.update({
+  id: '/analytics',
+  path: '/analytics',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedLinksIdRoute = AuthenticatedLinksIdRouteImport.update({
@@ -74,9 +105,14 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/expired': typeof ExpiredRoute
+  '/analytics': typeof AuthenticatedAnalyticsRoute
+  '/billing': typeof AuthenticatedBillingRoute
   '/bio': typeof AuthenticatedBioRoute
+  '/calculators': typeof AuthenticatedCalculatorsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/links': typeof AuthenticatedLinksRouteWithChildren
+  '/qr': typeof AuthenticatedQrRoute
+  '/seo': typeof AuthenticatedSeoRoute
   '/b/$slug': typeof BSlugRoute
   '/links/$id': typeof AuthenticatedLinksIdRoute
   '/api/public/r/$slug': typeof ApiPublicRSlugRoute
@@ -85,9 +121,14 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/expired': typeof ExpiredRoute
+  '/analytics': typeof AuthenticatedAnalyticsRoute
+  '/billing': typeof AuthenticatedBillingRoute
   '/bio': typeof AuthenticatedBioRoute
+  '/calculators': typeof AuthenticatedCalculatorsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/links': typeof AuthenticatedLinksRouteWithChildren
+  '/qr': typeof AuthenticatedQrRoute
+  '/seo': typeof AuthenticatedSeoRoute
   '/b/$slug': typeof BSlugRoute
   '/links/$id': typeof AuthenticatedLinksIdRoute
   '/api/public/r/$slug': typeof ApiPublicRSlugRoute
@@ -98,9 +139,14 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/expired': typeof ExpiredRoute
+  '/_authenticated/analytics': typeof AuthenticatedAnalyticsRoute
+  '/_authenticated/billing': typeof AuthenticatedBillingRoute
   '/_authenticated/bio': typeof AuthenticatedBioRoute
+  '/_authenticated/calculators': typeof AuthenticatedCalculatorsRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/links': typeof AuthenticatedLinksRouteWithChildren
+  '/_authenticated/qr': typeof AuthenticatedQrRoute
+  '/_authenticated/seo': typeof AuthenticatedSeoRoute
   '/b/$slug': typeof BSlugRoute
   '/_authenticated/links/$id': typeof AuthenticatedLinksIdRoute
   '/api/public/r/$slug': typeof ApiPublicRSlugRoute
@@ -111,9 +157,14 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/expired'
+    | '/analytics'
+    | '/billing'
     | '/bio'
+    | '/calculators'
     | '/dashboard'
     | '/links'
+    | '/qr'
+    | '/seo'
     | '/b/$slug'
     | '/links/$id'
     | '/api/public/r/$slug'
@@ -122,9 +173,14 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/expired'
+    | '/analytics'
+    | '/billing'
     | '/bio'
+    | '/calculators'
     | '/dashboard'
     | '/links'
+    | '/qr'
+    | '/seo'
     | '/b/$slug'
     | '/links/$id'
     | '/api/public/r/$slug'
@@ -134,9 +190,14 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/auth'
     | '/expired'
+    | '/_authenticated/analytics'
+    | '/_authenticated/billing'
     | '/_authenticated/bio'
+    | '/_authenticated/calculators'
     | '/_authenticated/dashboard'
     | '/_authenticated/links'
+    | '/_authenticated/qr'
+    | '/_authenticated/seo'
     | '/b/$slug'
     | '/_authenticated/links/$id'
     | '/api/public/r/$slug'
@@ -188,6 +249,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/seo': {
+      id: '/_authenticated/seo'
+      path: '/seo'
+      fullPath: '/seo'
+      preLoaderRoute: typeof AuthenticatedSeoRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/qr': {
+      id: '/_authenticated/qr'
+      path: '/qr'
+      fullPath: '/qr'
+      preLoaderRoute: typeof AuthenticatedQrRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/links': {
       id: '/_authenticated/links'
       path: '/links'
@@ -202,11 +277,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/calculators': {
+      id: '/_authenticated/calculators'
+      path: '/calculators'
+      fullPath: '/calculators'
+      preLoaderRoute: typeof AuthenticatedCalculatorsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/bio': {
       id: '/_authenticated/bio'
       path: '/bio'
       fullPath: '/bio'
       preLoaderRoute: typeof AuthenticatedBioRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/billing': {
+      id: '/_authenticated/billing'
+      path: '/billing'
+      fullPath: '/billing'
+      preLoaderRoute: typeof AuthenticatedBillingRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/analytics': {
+      id: '/_authenticated/analytics'
+      path: '/analytics'
+      fullPath: '/analytics'
+      preLoaderRoute: typeof AuthenticatedAnalyticsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/links/$id': {
@@ -238,15 +334,25 @@ const AuthenticatedLinksRouteWithChildren =
   AuthenticatedLinksRoute._addFileChildren(AuthenticatedLinksRouteChildren)
 
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAnalyticsRoute: typeof AuthenticatedAnalyticsRoute
+  AuthenticatedBillingRoute: typeof AuthenticatedBillingRoute
   AuthenticatedBioRoute: typeof AuthenticatedBioRoute
+  AuthenticatedCalculatorsRoute: typeof AuthenticatedCalculatorsRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedLinksRoute: typeof AuthenticatedLinksRouteWithChildren
+  AuthenticatedQrRoute: typeof AuthenticatedQrRoute
+  AuthenticatedSeoRoute: typeof AuthenticatedSeoRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAnalyticsRoute: AuthenticatedAnalyticsRoute,
+  AuthenticatedBillingRoute: AuthenticatedBillingRoute,
   AuthenticatedBioRoute: AuthenticatedBioRoute,
+  AuthenticatedCalculatorsRoute: AuthenticatedCalculatorsRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedLinksRoute: AuthenticatedLinksRouteWithChildren,
+  AuthenticatedQrRoute: AuthenticatedQrRoute,
+  AuthenticatedSeoRoute: AuthenticatedSeoRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
@@ -263,13 +369,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

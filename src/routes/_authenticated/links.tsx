@@ -6,6 +6,7 @@ import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import { Plus, Trash2, ExternalLink, QrCode, Copy, Globe, Smartphone, Clock, X } from "lucide-react";
 import { QRPreview } from "@/components/qr-preview";
+import { sanitizeUrl, isValidUrl } from "@/lib/url";
 
 export const Route = createFileRoute("/_authenticated/links")({
   head: () => ({ meta: [{ title: "Smart Links — Proforma Hub" }, { name: "description", content: "Create and manage smart links." }] }),
