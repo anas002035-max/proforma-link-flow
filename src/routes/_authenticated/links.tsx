@@ -50,14 +50,18 @@ function LinksPage() {
 
   const createMut = useMutation({
     mutationFn: async () => {
+      const default_url = sanitizeUrl(form.default_url);
+      if (!isValidUrl(default_url)) throw new Error("Please enter a valid destination URL.");
       const geo_rules: Record<string, string> = {};
       for (const row of form.geo) {
-        if (!row.country || !row.url) continue;
-        if (!/^https?:\/\//i.test(row.url)) throw new Error(`Invalid URL for ${row.country}`);
-        geo_rules[row.country.toUpperCase()] = row.url;
+        if (!row.country) continue;
+        const clean = sanitizeUrl(row.url);
+        if (!clean) continue;
+        if (!isValidUrl(clean)) throw new Error(`Invalid URL for ${row.country}`);
+        geo_rules[row.country.toUpperCase()] = clean;
       }
       return create({ data: {
-        slug: form.slug, title: form.title || null, default_url: form.default_url,
+        slug: form.slug, title: form.title || null, default_url,
         geo_rules, deep_link_enabled: form.deep_link_enabled,
         expires_at: form.expires_at ? new Date(form.expires_at).toISOString() : null,
       } });
