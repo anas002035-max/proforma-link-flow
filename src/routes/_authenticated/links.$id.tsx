@@ -4,8 +4,9 @@ import { useQuery, useMutation } from "@tanstack/react-query";
 import { getLink, updateQrStyle } from "@/lib/links.functions";
 import { useState, useEffect } from "react";
 import { QRPreview } from "@/components/qr-preview";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, MousePointerClick } from "lucide-react";
 import { toast } from "sonner";
+import { TrafficLineChart, BreakdownPie } from "@/components/analytics-charts";
 
 export const Route = createFileRoute("/_authenticated/links/$id")({
   head: () => ({ meta: [{ title: "Link details — Proforma Hub" }, { name: "description", content: "Link analytics and QR customizer." }] }),
