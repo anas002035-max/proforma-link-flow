@@ -6,6 +6,7 @@ import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import { Plus, Trash2, ExternalLink, QrCode, Copy, Globe, Smartphone, Clock, X } from "lucide-react";
 import { QRPreview } from "@/components/qr-preview";
+import { sanitizeUrl, isValidUrl } from "@/lib/url";
 
 export const Route = createFileRoute("/_authenticated/links")({
   head: () => ({ meta: [{ title: "Smart Links — Proforma Hub" }, { name: "description", content: "Create and manage smart links." }] }),
@@ -49,14 +50,18 @@ function LinksPage() {
 
   const createMut = useMutation({
     mutationFn: async () => {
+      const default_url = sanitizeUrl(form.default_url);
+      if (!isValidUrl(default_url)) throw new Error("Please enter a valid destination URL.");
       const geo_rules: Record<string, string> = {};
       for (const row of form.geo) {
-        if (!row.country || !row.url) continue;
-        if (!/^https?:\/\//i.test(row.url)) throw new Error(`Invalid URL for ${row.country}`);
-        geo_rules[row.country.toUpperCase()] = row.url;
+        if (!row.country) continue;
+        const clean = sanitizeUrl(row.url);
+        if (!clean) continue;
+        if (!isValidUrl(clean)) throw new Error(`Invalid URL for ${row.country}`);
+        geo_rules[row.country.toUpperCase()] = clean;
       }
       return create({ data: {
-        slug: form.slug, title: form.title || null, default_url: form.default_url,
+        slug: form.slug, title: form.title || null, default_url,
         geo_rules, deep_link_enabled: form.deep_link_enabled,
         expires_at: form.expires_at ? new Date(form.expires_at).toISOString() : null,
       } });
@@ -192,8 +197,8 @@ function NewLinkModal({ form, setForm, onClose, onSubmit, pending }: {
 
   return (
     <div className="fixed inset-0 z-50 grid place-items-center bg-background/80 backdrop-blur-sm p-4" onClick={onClose}>
-      <div className="glass w-full max-w-xl max-h-[90vh] overflow-y-auto p-6" onClick={(e) => e.stopPropagation()}>
-        <div className="mb-4 flex items-center justify-between">
+      <div className="glass w-full max-w-2xl max-h-[92vh] flex flex-col overflow-hidden" onClick={(e) => e.stopPropagation()}>
+        <div className="flex items-center justify-between border-b border-border/60 px-6 py-4">
           <div>
             <h2 className="text-lg font-bold">New smart link</h2>
             <p className="text-xs text-muted-foreground">One link, infinite destinations.</p>
@@ -201,17 +206,33 @@ function NewLinkModal({ form, setForm, onClose, onSubmit, pending }: {
           <button onClick={onClose} className="rounded-lg p-1.5 text-muted-foreground hover:bg-surface-2"><X className="h-4 w-4" /></button>
         </div>
 
-        <form onSubmit={(e) => { e.preventDefault(); onSubmit(); }} className="space-y-4">
-          <Field label="Default destination URL" hint="Where users land by default.">
-            <input required type="url" value={form.default_url} onChange={(e) => setForm({ ...form, default_url: e.target.value })} className="input" placeholder="https://example.com" />
+        <form id="new-link-form" onSubmit={(e) => { e.preventDefault(); onSubmit(); }} className="flex-1 space-y-5 overflow-y-auto px-6 py-5">
+          <Field label="Default destination URL" hint="Paste any URL — markdown links and brackets are auto-cleaned.">
+            <input
+              required
+              type="text"
+              value={form.default_url}
+              onChange={(e) => setForm({ ...form, default_url: e.target.value })}
+              onPaste={(e) => {
+                const pasted = e.clipboardData.getData("text");
+                const clean = sanitizeUrl(pasted);
+                if (clean !== pasted) {
+                  e.preventDefault();
+                  setForm({ ...form, default_url: clean });
+                }
+              }}
+              onBlur={(e) => setForm({ ...form, default_url: sanitizeUrl(e.target.value) })}
+              className="input"
+              placeholder="https://example.com"
+            />
           </Field>
 
           <Field label="Dynamic slug" hint={preview}>
-            <div className="flex items-stretch gap-0 rounded-lg border border-input bg-surface overflow-hidden focus-within:border-[color:var(--neon-blue)] focus-within:shadow-[var(--glow-blue)]">
-              <span className="px-3 py-2 text-xs text-muted-foreground border-r border-input bg-background/40">proforma.link/</span>
+            <div className="flex items-stretch rounded-lg border border-input bg-surface overflow-hidden focus-within:border-[color:var(--neon-blue)] focus-within:shadow-[var(--glow-blue)]">
+              <span className="px-3 py-2 text-xs text-muted-foreground border-r border-input bg-background/40 whitespace-nowrap">proforma.link/</span>
               <input required pattern="[a-z0-9\-]+" minLength={3} value={form.slug}
                 onChange={(e) => setForm({ ...form, slug: e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, "") })}
-                className="flex-1 bg-transparent px-3 py-2 text-sm outline-none" placeholder="summer-sale" />
+                className="flex-1 min-w-0 bg-transparent px-3 py-2 text-sm outline-none" placeholder="summer-sale" />
             </div>
           </Field>
 
@@ -220,12 +241,12 @@ function NewLinkModal({ form, setForm, onClose, onSubmit, pending }: {
           </Field>
 
           <div>
-            <div className="mb-2 flex items-center justify-between">
-              <div>
+            <div className="mb-2 flex items-center justify-between gap-3">
+              <div className="min-w-0">
                 <div className="text-xs font-medium text-muted-foreground flex items-center gap-1.5"><Globe className="h-3 w-3" /> Geo-targeting</div>
-                <div className="text-[11px] text-muted-foreground/70">Send users from specific countries to custom URLs.</div>
+                <div className="text-[11px] text-muted-foreground/70">Send visitors from specific countries to custom URLs.</div>
               </div>
-              <button type="button" onClick={addGeo} className="rounded-lg border border-border bg-surface px-2.5 py-1 text-xs hover:bg-surface-2 inline-flex items-center gap-1">
+              <button type="button" onClick={addGeo} className="shrink-0 rounded-lg border border-border bg-surface px-2.5 py-1 text-xs hover:bg-surface-2 inline-flex items-center gap-1">
                 <Plus className="h-3 w-3" /> Rule
               </button>
             </div>
@@ -237,12 +258,24 @@ function NewLinkModal({ form, setForm, onClose, onSubmit, pending }: {
               <div className="space-y-2">
                 {form.geo.map((row) => (
                   <div key={row.id} className="flex items-center gap-2">
-                    <select value={row.country} onChange={(e) => updGeo(row.id, { country: e.target.value })} className="input !w-36">
+                    <select value={row.country} onChange={(e) => updGeo(row.id, { country: e.target.value })} className="input !w-40 shrink-0">
                       <option value="">Country…</option>
                       {COUNTRIES.map((c) => <option key={c.code} value={c.code}>{c.code} — {c.name}</option>)}
                     </select>
-                    <input type="url" value={row.url} onChange={(e) => updGeo(row.id, { url: e.target.value })} className="input flex-1" placeholder="https://…" />
-                    <button type="button" onClick={() => rmGeo(row.id)} className="rounded-lg p-2 text-muted-foreground hover:text-destructive"><Trash2 className="h-3.5 w-3.5" /></button>
+                    <input
+                      type="text"
+                      value={row.url}
+                      onChange={(e) => updGeo(row.id, { url: e.target.value })}
+                      onPaste={(e) => {
+                        const pasted = e.clipboardData.getData("text");
+                        const clean = sanitizeUrl(pasted);
+                        if (clean !== pasted) { e.preventDefault(); updGeo(row.id, { url: clean }); }
+                      }}
+                      onBlur={(e) => updGeo(row.id, { url: sanitizeUrl(e.target.value) })}
+                      className="input flex-1 min-w-0"
+                      placeholder="https://…"
+                    />
+                    <button type="button" onClick={() => rmGeo(row.id)} className="shrink-0 rounded-lg p-2 text-muted-foreground hover:text-destructive"><Trash2 className="h-3.5 w-3.5" /></button>
                   </div>
                 ))}
               </div>
@@ -260,14 +293,14 @@ function NewLinkModal({ form, setForm, onClose, onSubmit, pending }: {
           <Field label="Expires at (optional)">
             <input type="datetime-local" value={form.expires_at} onChange={(e) => setForm({ ...form, expires_at: e.target.value })} className="input" />
           </Field>
-
-          <div className="flex gap-2 pt-2">
-            <button type="button" onClick={onClose} className="flex-1 rounded-lg border border-input bg-surface px-3 py-2 text-sm hover:bg-surface-2">Cancel</button>
-            <button type="submit" disabled={pending} className="flex-1 rounded-lg bg-[image:var(--gradient-neon)] px-3 py-2 text-sm font-semibold text-[color:var(--primary-foreground)] disabled:opacity-60">
-              {pending ? "Creating…" : "Create link"}
-            </button>
-          </div>
         </form>
+
+        <div className="flex gap-2 border-t border-border/60 bg-background/40 px-6 py-4">
+          <button type="button" onClick={onClose} className="flex-1 rounded-lg border border-input bg-surface px-3 py-2.5 text-sm hover:bg-surface-2">Cancel</button>
+          <button type="submit" form="new-link-form" disabled={pending} className="flex-1 rounded-lg bg-[image:var(--gradient-neon)] px-3 py-2.5 text-sm font-semibold text-[color:var(--primary-foreground)] disabled:opacity-60 hover:opacity-90">
+            {pending ? "Creating…" : "Create link"}
+          </button>
+        </div>
       </div>
     </div>
   );

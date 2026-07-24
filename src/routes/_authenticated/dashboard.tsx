@@ -1,8 +1,9 @@
 import { createFileRoute, Link, useRouteContext } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
-import { listMyLinks } from "@/lib/links.functions";
-import { Link2, QrCode, MousePointerClick, TrendingUp, Plus } from "lucide-react";
+import { listMyLinks, getAllAnalytics } from "@/lib/links.functions";
+import { Link2, QrCode, MousePointerClick, TrendingUp, Plus, Calculator, Search, BarChart3 } from "lucide-react";
+import { TrafficLineChart, BreakdownPie } from "@/components/analytics-charts";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({ meta: [{ title: "Dashboard — Proforma Hub" }, { name: "description", content: "Your Proforma Hub dashboard." }] }),
@@ -12,11 +13,14 @@ export const Route = createFileRoute("/_authenticated/dashboard")({
 function Dashboard() {
   const ctx = useRouteContext({ from: "/_authenticated" });
   const fetchLinks = useServerFn(listMyLinks);
+  const fetchAnalytics = useServerFn(getAllAnalytics);
   const { data: links = [] } = useQuery({ queryKey: ["my-links"], queryFn: () => fetchLinks() });
+  const { data: analytics } = useQuery({ queryKey: ["all-analytics"], queryFn: () => fetchAnalytics(), refetchInterval: 30000 });
 
   const totalLinks = links.length;
   const activeLinks = links.filter((l) => l.is_active).length;
-  const expiringSoon = links.filter((l) => l.expires_at && new Date(l.expires_at).getTime() - Date.now() < 7 * 86400000).length;
+  const totalClicks = analytics?.totalClicks ?? 0;
+  const logs = analytics?.logs ?? [];
 
   return (
     <div className="p-6 md:p-10">
@@ -30,16 +34,35 @@ function Dashboard() {
         </Link>
       </header>
 
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <StatCard label="Total Links" value={totalLinks} icon={<Link2 />} accent="blue" />
-        <StatCard label="Active" value={activeLinks} icon={<TrendingUp />} accent="green" />
-        <StatCard label="Expiring Soon" value={expiringSoon} icon={<MousePointerClick />} accent="blue" />
-        <StatCard label="QR Codes" value={totalLinks} icon={<QrCode />} accent="green" />
+      <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+        <StatCard label="Total clicks" value={totalClicks} icon={<MousePointerClick />} accent="blue" />
+        <StatCard label="Smart links" value={totalLinks} icon={<Link2 />} accent="green" />
+        <StatCard label="Active" value={activeLinks} icon={<TrendingUp />} accent="blue" />
+        <StatCard label="QR codes" value={totalLinks} icon={<QrCode />} accent="green" />
       </div>
 
       <div className="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-3">
         <div className="glass p-6 lg:col-span-2">
-          <h2 className="text-lg font-semibold">Recent Links</h2>
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="text-lg font-semibold">Daily traffic</h2>
+              <p className="text-xs text-muted-foreground">Last 14 days</p>
+            </div>
+            <Link to="/analytics" className="text-xs text-[color:var(--neon-blue)] hover:underline">Open analytics →</Link>
+          </div>
+          <div className="mt-4"><TrafficLineChart logs={logs} /></div>
+        </div>
+        <BreakdownPie logs={logs} kind="country" title="Top countries" />
+      </div>
+
+      <div className="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-2">
+        <BreakdownPie logs={logs} kind="device_type" title="Devices" />
+        <BreakdownPie logs={logs} kind="os" title="Operating systems" />
+      </div>
+
+      <div className="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-3">
+        <div className="glass p-6 lg:col-span-2">
+          <h2 className="text-lg font-semibold">Recent links</h2>
           {links.length === 0 ? (
             <div className="mt-6 rounded-lg border border-dashed border-border p-8 text-center text-sm text-muted-foreground">
               No links yet. <Link to="/links" className="text-[color:var(--neon-blue)] hover:underline">Create your first smart link →</Link>
@@ -61,13 +84,14 @@ function Dashboard() {
           )}
         </div>
         <div className="glass p-6">
-          <h2 className="text-lg font-semibold">Quick tips</h2>
-          <ul className="mt-4 space-y-3 text-sm text-muted-foreground">
-            <li>• Add per-country URLs in the geo rules JSON.</li>
-            <li>• Enable deep linking to open native apps.</li>
-            <li>• Set an expiry date to auto-redirect to the expired page.</li>
-            <li>• Print the QR — swap the destination anytime.</li>
-          </ul>
+          <h2 className="text-lg font-semibold">Explore tools</h2>
+          <div className="mt-4 space-y-2">
+            <ToolLink to="/qr" icon={<QrCode className="h-4 w-4" />} label="Dynamic QR codes" />
+            <ToolLink to="/bio" icon={<Link2 className="h-4 w-4" />} label="Bio page builder" />
+            <ToolLink to="/analytics" icon={<BarChart3 className="h-4 w-4" />} label="Live analytics" />
+            <ToolLink to="/calculators" icon={<Calculator className="h-4 w-4" />} label="Calculator suite" />
+            <ToolLink to="/seo" icon={<Search className="h-4 w-4" />} label="SEO toolkit" />
+          </div>
         </div>
       </div>
     </div>
@@ -84,5 +108,13 @@ function StatCard({ label, value, icon, accent }: { label: string; value: number
       </div>
       <div className="mt-3 text-3xl font-black">{value}</div>
     </div>
+  );
+}
+
+function ToolLink({ to, icon, label }: { to: string; icon: React.ReactNode; label: string }) {
+  return (
+    <Link to={to} className="flex items-center gap-2 rounded-lg border border-border bg-surface/50 px-3 py-2 text-sm hover:bg-surface hover:shadow-[var(--glow-blue)]">
+      <span className="text-[color:var(--neon-blue)]">{icon}</span>{label}
+    </Link>
   );
 }
