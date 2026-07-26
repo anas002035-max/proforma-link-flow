@@ -163,20 +163,36 @@ export default function SchemaVisualizer() {
         </div>
 
         <div className="glass p-5">
-          <div className="flex items-center justify-between gap-2">
-            <h3 className="text-sm font-semibold">Migration output</h3>
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <h3 className="text-sm font-semibold">Migration SQL <span className="font-normal text-muted-foreground">(editable)</span></h3>
             <div className="flex items-center gap-2">
-              <select value={dialect} onChange={(e) => setDialect(e.target.value as "postgres" | "mysql")} className="rounded-lg border border-input bg-surface px-2 py-1 text-xs outline-none [&>option]:bg-[color:var(--popover)]">
+              <select value={dialect} onChange={(e) => { setDialect(e.target.value as "postgres" | "mysql"); setSource("canvas"); }} className="rounded-lg border border-input bg-surface px-2 py-1 text-xs outline-none [&>option]:bg-[color:var(--popover)]">
                 <option value="postgres">PostgreSQL</option>
                 <option value="mysql">MySQL</option>
               </select>
-              <button onClick={() => { navigator.clipboard.writeText(ddl); setCopied(true); setTimeout(() => setCopied(false), 1500); }} className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-surface px-2.5 py-1 text-xs font-semibold hover:bg-surface-2">
+              <button onClick={() => { setSource("canvas"); setSqlError(""); setSql(ddl); }} title="Regenerate from canvas" className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-surface px-2.5 py-1 text-xs font-semibold hover:bg-surface-2">
+                <Wand2 className="h-3.5 w-3.5" />
+              </button>
+              <button onClick={() => { navigator.clipboard.writeText(sql); setCopied(true); setTimeout(() => setCopied(false), 1500); }} className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-surface px-2.5 py-1 text-xs font-semibold hover:bg-surface-2">
                 {copied ? <Check className="h-3.5 w-3.5 text-[color:var(--neon-green)]" /> : <Copy className="h-3.5 w-3.5" />}
               </button>
             </div>
           </div>
-          <pre className="mt-3 max-h-72 overflow-auto rounded-lg bg-surface p-3 font-mono text-[11px] leading-relaxed">{ddl}</pre>
+          <p className="mt-1 text-[11px] text-muted-foreground">Paste any PostgreSQL/MySQL DDL — the canvas re-draws tables and foreign-key lines as you type.</p>
+          <textarea
+            value={sql}
+            spellCheck={false}
+            rows={16}
+            onChange={(e) => onSqlChange(e.target.value)}
+            className="mt-3 w-full resize-y rounded-lg border border-input bg-surface p-3 font-mono text-[11px] leading-relaxed outline-none focus:border-[color:var(--neon-blue)]"
+          />
+          {sqlError && (
+            <p className="mt-2 inline-flex items-center gap-1.5 text-[11px] text-[color:var(--destructive)]">
+              <AlertTriangle className="h-3.5 w-3.5" /> {sqlError}
+            </p>
+          )}
         </div>
+
       </div>
     </div>
   );
