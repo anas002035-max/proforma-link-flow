@@ -1,7 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { useDevPro } from "@/hooks/use-dev-pro";
 
 export function usePlan() {
+  const { devPro } = useDevPro();
   const { data, isLoading } = useQuery({
     queryKey: ["my-plan"],
     queryFn: async () => {
