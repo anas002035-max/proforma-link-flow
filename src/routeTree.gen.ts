@@ -15,6 +15,7 @@ import { Route as ToolsRouteRouteImport } from './routes/tools/route'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ToolsIndexRouteImport } from './routes/tools/index'
+import { Route as ToolsSlugRouteImport } from './routes/tools/$slug'
 import { Route as BSlugRouteImport } from './routes/b.$slug'
 import { Route as AuthenticatedSeoRouteImport } from './routes/_authenticated/seo'
 import { Route as AuthenticatedQrRouteImport } from './routes/_authenticated/qr'
@@ -54,6 +55,11 @@ const IndexRoute = IndexRouteImport.update({
 const ToolsIndexRoute = ToolsIndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => ToolsRouteRoute,
+} as any)
+const ToolsSlugRoute = ToolsSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
   getParentRoute: () => ToolsRouteRoute,
 } as any)
 const BSlugRoute = BSlugRouteImport.update({
@@ -127,6 +133,7 @@ export interface FileRoutesByFullPath {
   '/qr': typeof AuthenticatedQrRoute
   '/seo': typeof AuthenticatedSeoRoute
   '/b/$slug': typeof BSlugRoute
+  '/tools/$slug': typeof ToolsSlugRoute
   '/tools/': typeof ToolsIndexRoute
   '/links/$id': typeof AuthenticatedLinksIdRoute
   '/api/public/r/$slug': typeof ApiPublicRSlugRoute
@@ -144,6 +151,7 @@ export interface FileRoutesByTo {
   '/qr': typeof AuthenticatedQrRoute
   '/seo': typeof AuthenticatedSeoRoute
   '/b/$slug': typeof BSlugRoute
+  '/tools/$slug': typeof ToolsSlugRoute
   '/tools': typeof ToolsIndexRoute
   '/links/$id': typeof AuthenticatedLinksIdRoute
   '/api/public/r/$slug': typeof ApiPublicRSlugRoute
@@ -164,6 +172,7 @@ export interface FileRoutesById {
   '/_authenticated/qr': typeof AuthenticatedQrRoute
   '/_authenticated/seo': typeof AuthenticatedSeoRoute
   '/b/$slug': typeof BSlugRoute
+  '/tools/$slug': typeof ToolsSlugRoute
   '/tools/': typeof ToolsIndexRoute
   '/_authenticated/links/$id': typeof AuthenticatedLinksIdRoute
   '/api/public/r/$slug': typeof ApiPublicRSlugRoute
@@ -184,6 +193,7 @@ export interface FileRouteTypes {
     | '/qr'
     | '/seo'
     | '/b/$slug'
+    | '/tools/$slug'
     | '/tools/'
     | '/links/$id'
     | '/api/public/r/$slug'
@@ -201,6 +211,7 @@ export interface FileRouteTypes {
     | '/qr'
     | '/seo'
     | '/b/$slug'
+    | '/tools/$slug'
     | '/tools'
     | '/links/$id'
     | '/api/public/r/$slug'
@@ -220,6 +231,7 @@ export interface FileRouteTypes {
     | '/_authenticated/qr'
     | '/_authenticated/seo'
     | '/b/$slug'
+    | '/tools/$slug'
     | '/tools/'
     | '/_authenticated/links/$id'
     | '/api/public/r/$slug'
@@ -277,6 +289,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/tools/'
       preLoaderRoute: typeof ToolsIndexRouteImport
+      parentRoute: typeof ToolsRouteRoute
+    }
+    '/tools/$slug': {
+      id: '/tools/$slug'
+      path: '/$slug'
+      fullPath: '/tools/$slug'
+      preLoaderRoute: typeof ToolsSlugRouteImport
       parentRoute: typeof ToolsRouteRoute
     }
     '/b/$slug': {
@@ -396,10 +415,12 @@ const AuthenticatedRouteRouteWithChildren =
   AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
 
 interface ToolsRouteRouteChildren {
+  ToolsSlugRoute: typeof ToolsSlugRoute
   ToolsIndexRoute: typeof ToolsIndexRoute
 }
 
 const ToolsRouteRouteChildren: ToolsRouteRouteChildren = {
+  ToolsSlugRoute: ToolsSlugRoute,
   ToolsIndexRoute: ToolsIndexRoute,
 }
 
