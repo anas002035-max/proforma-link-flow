@@ -1,7 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { createClient } from "@supabase/supabase-js";
 import { parseUA, deepLinkFor } from "@/lib/device";
-import type { Database } from "@/integrations/supabase/types";
 
 export const Route = createFileRoute("/api/public/r/$slug")({
   server: {
