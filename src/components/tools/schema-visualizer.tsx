@@ -28,9 +28,30 @@ export default function SchemaVisualizer() {
   ]);
   const [dialect, setDialect] = useState<"postgres" | "mysql">("postgres");
   const [copied, setCopied] = useState(false);
+  const [source, setSource] = useState<"canvas" | "sql">("canvas");
+  const [sql, setSql] = useState("");
+  const [sqlError, setSqlError] = useState("");
   const drag = useRef<{ id: string; dx: number; dy: number } | null>(null);
 
   const ddl = useMemo(() => compile(tables, relations, dialect), [tables, relations, dialect]);
+
+  useEffect(() => {
+    if (source === "canvas") setSql(ddl);
+  }, [ddl, source]);
+
+  function onSqlChange(text: string) {
+    setSource("sql");
+    setSql(text);
+    const parsed = parseSql(text, tables);
+    if (!parsed) {
+      setSqlError("No CREATE TABLE statement found — the canvas keeps its current shape.");
+      return;
+    }
+    setSqlError("");
+    setTables(parsed.tables);
+    setRelations(parsed.relations);
+  }
+
 
   function onMove(e: React.MouseEvent) {
     if (!drag.current) return;
