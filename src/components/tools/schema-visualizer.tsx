@@ -220,3 +220,117 @@ function compile(tables: Table[], relations: Relation[], dialect: "postgres" | "
     return `CREATE TABLE ${t.name} (\n${[...cols, ...fks].join(",\n")}\n);`;
   }).join("\n\n");
 }
+
+const TYPE_ALIASES: [RegExp, string][] = [
+  [/^uuid|^char\(36\)/i, "uuid"],
+  [/^(text|varchar|character|string|nvarchar|citext)/i, "text"],
+  [/^(bigint|bigserial|int8)/i, "bigint"],
+  [/^(smallint|integer|int|serial|int4|mediumint|tinyint\(1\))/i, "integer"],
+  [/^(bool)/i, "boolean"],
+  [/^(numeric|decimal|real|double|float|money)/i, "numeric"],
+  [/^(jsonb|json)/i, "jsonb"],
+  [/^(timestamptz|timestamp|datetime)/i, "timestamptz"],
+  [/^date/i, "date"],
+];
+
+function normalizeType(raw: string) {
+  const t = raw.trim();
+  if (/^tinyint\s*\(\s*1\s*\)/i.test(t)) return "boolean";
+  for (const [re, out] of TYPE_ALIASES) if (re.test(t)) return out;
+  return "text";
+}
+
+function splitTopLevel(body: string) {
+  const parts: string[] = [];
+  let depth = 0, current = "", quote = "";
+  for (const ch of body) {
+    if (quote) {
+      current += ch;
+      if (ch === quote) quote = "";
+      continue;
+    }
+    if (ch === "'" || ch === '"' || ch === "`") { quote = ch; current += ch; continue; }
+    if (ch === "(") depth++;
+    if (ch === ")") depth--;
+    if (ch === "," && depth === 0) { parts.push(current); current = ""; continue; }
+    current += ch;
+  }
+  if (current.trim()) parts.push(current);
+  return parts.map((p) => p.trim()).filter(Boolean);
+}
+
+const clean = (s: string) => s.replace(/["`\[\]]/g, "").replace(/^[\w]+\./, "").trim();
+
+/** Parse raw DDL into canvas tables + relations. Returns null when nothing parseable is found. */
+function parseSql(sqlText: string, previous: Table[]): { tables: Table[]; relations: Relation[] } | null {
+  const text = sqlText.replace(/--[^\n]*/g, "").replace(/\/\*[\s\S]*?\*\//g, "");
+  const re = /CREATE\s+TABLE\s+(?:IF\s+NOT\s+EXISTS\s+)?([`"\[\]\w.]+)\s*\(/gi;
+  const parsedTables: Table[] = [];
+  type PendingFk = { fromTable: string; fromCol: string; toTable: string; toCol: string };
+  const pending: PendingFk[] = [];
+
+  let m: RegExpExecArray | null;
+  let index = 0;
+  while ((m = re.exec(text))) {
+    const start = m.index + m[0].length;
+    let depth = 1, i = start;
+    while (i < text.length && depth > 0) {
+      if (text[i] === "(") depth++;
+      else if (text[i] === ")") depth--;
+      i++;
+    }
+    if (depth !== 0) continue;
+    const body = text.slice(start, i - 1);
+    const name = clean(m[1]);
+    const prior = previous.find((p) => p.name === name);
+    const table: Table = {
+      id: prior?.id ?? uid(),
+      name,
+      x: prior?.x ?? 40 + (index % 3) * 250,
+      y: prior?.y ?? 40 + Math.floor(index / 3) * 220,
+      columns: [],
+    };
+    const pkNames = new Set<string>();
+
+    for (const part of splitTopLevel(body)) {
+      const fkMatch = part.match(/FOREIGN\s+KEY\s*\(([^)]+)\)\s*REFERENCES\s+([`"\[\]\w.]+)\s*\(([^)]+)\)/i);
+      if (fkMatch) {
+        pending.push({ fromTable: name, fromCol: clean(fkMatch[1]), toTable: clean(fkMatch[2]), toCol: clean(fkMatch[3]) });
+        continue;
+      }
+      const pkMatch = part.match(/^(?:CONSTRAINT\s+\S+\s+)?PRIMARY\s+KEY\s*\(([^)]+)\)/i);
+      if (pkMatch) {
+        pkMatch[1].split(",").forEach((c) => pkNames.add(clean(c)));
+        continue;
+      }
+      if (/^(CONSTRAINT|UNIQUE|CHECK|INDEX|KEY|EXCLUDE)\b/i.test(part)) continue;
+
+      const colMatch = part.match(/^([`"\[\]\w]+)\s+([\w]+(?:\s*\([^)]*\))?(?:\s+(?:WITH|WITHOUT)\s+TIME\s+ZONE)?)/i);
+      if (!colMatch) continue;
+      const colName = clean(colMatch[1]);
+      const inlineFk = part.match(/REFERENCES\s+([`"\[\]\w.]+)\s*\(([^)]+)\)/i);
+      if (inlineFk) pending.push({ fromTable: name, fromCol: colName, toTable: clean(inlineFk[1]), toCol: clean(inlineFk[2]) });
+      table.columns.push({
+        name: colName,
+        type: normalizeType(colMatch[2]),
+        pk: /PRIMARY\s+KEY/i.test(part),
+        nullable: !/NOT\s+NULL/i.test(part) && !/PRIMARY\s+KEY/i.test(part),
+      });
+    }
+
+    table.columns = table.columns.map((c) => (pkNames.has(c.name) ? { ...c, pk: true, nullable: false } : c));
+    parsedTables.push(table);
+    index++;
+  }
+
+  if (!parsedTables.length) return null;
+
+  const relations: Relation[] = pending.flatMap((p) => {
+    const from = parsedTables.find((t) => t.name === p.fromTable);
+    const to = parsedTables.find((t) => t.name === p.toTable);
+    if (!from || !to) return [];
+    return [{ id: uid(), from: from.id, fromCol: p.fromCol, to: to.id, toCol: p.toCol, kind: "1-n" as const }];
+  });
+
+  return { tables: parsedTables, relations };
+}
