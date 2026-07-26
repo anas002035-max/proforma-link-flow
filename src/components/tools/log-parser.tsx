@@ -1,40 +1,47 @@
 import { useRef, useState } from "react";
-import { Upload, Loader2 } from "lucide-react";
+import { Upload, Loader2, ClipboardType, Play } from "lucide-react";
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, LineChart, Line } from "recharts";
 
 const WORKER_SRC = `
 const LINE = /^(\\S+) \\S+ \\S+ \\[([^\\]]+)\\] "(\\S+) (\\S+)[^"]*" (\\d{3}) (\\d+|-)/;
 self.onmessage = async (e) => {
-  const file = e.data;
+  const input = e.data;
   const status = {}, paths = {}, hours = {}, ips = {};
   let total = 0, bytes = 0, unparsed = 0;
-  const stream = file.stream().pipeThrough(new TextDecoderStream());
-  const reader = stream.getReader();
-  let carry = "";
-  while (true) {
-    const { value, done } = await reader.read();
-    if (done) break;
-    const chunk = carry + value;
-    const lines = chunk.split("\\n");
-    carry = lines.pop() || "";
-    for (const line of lines) {
-      if (!line.trim()) continue;
-      total++;
-      const m = LINE.exec(line);
-      if (!m) { unparsed++; continue; }
-      const [, ip, ts, , path, code, size] = m;
-      status[code] = (status[code] || 0) + 1;
-      paths[path] = (paths[path] || 0) + 1;
-      ips[ip] = (ips[ip] || 0) + 1;
-      const hour = ts.slice(0, 14);
-      hours[hour] = (hours[hour] || 0) + 1;
-      if (size !== "-") bytes += Number(size);
-      if (total % 20000 === 0) self.postMessage({ type: "progress", total });
+  const handle = (line) => {
+    if (!line.trim()) return;
+    total++;
+    const m = LINE.exec(line);
+    if (!m) { unparsed++; return; }
+    const [, ip, ts, , path, code, size] = m;
+    status[code] = (status[code] || 0) + 1;
+    paths[path] = (paths[path] || 0) + 1;
+    ips[ip] = (ips[ip] || 0) + 1;
+    const hour = ts.slice(0, 14);
+    hours[hour] = (hours[hour] || 0) + 1;
+    if (size !== "-") bytes += Number(size);
+    if (total % 20000 === 0) self.postMessage({ type: "progress", total });
+  };
+  if (typeof input === "string") {
+    for (const line of input.split(/\\r?\\n/)) handle(line);
+  } else {
+    const stream = input.stream().pipeThrough(new TextDecoderStream());
+    const reader = stream.getReader();
+    let carry = "";
+    while (true) {
+      const { value, done } = await reader.read();
+      if (done) break;
+      const chunk = carry + value;
+      const lines = chunk.split("\\n");
+      carry = lines.pop() || "";
+      for (const line of lines) handle(line);
     }
+    handle(carry);
   }
   self.postMessage({ type: "done", result: { total, unparsed, bytes, status, paths, hours, ips } });
 };
 `;
+
 
 type Result = {
   total: number; unparsed: number; bytes: number;
