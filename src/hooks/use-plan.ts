@@ -19,8 +19,9 @@ export function usePlan() {
     staleTime: 60_000,
   });
   return {
-    isLoading,
+    isLoading: devPro ? false : isLoading,
     signedIn: data?.signedIn ?? false,
-    isPro: (data?.tier ?? "free") !== "free",
+    isPro: devPro || (data?.tier ?? "free") !== "free",
+    devPro,
   };
 }
