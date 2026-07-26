@@ -9,7 +9,7 @@ import { QRPreview } from "@/components/qr-preview";
 import { sanitizeUrl, isValidUrl } from "@/lib/url";
 
 export const Route = createFileRoute("/_authenticated/links")({
-  head: () => ({ meta: [{ title: "Smart Links — Proforma Hub" }, { name: "description", content: "Create and manage smart links." }] }),
+  head: () => ({ meta: [{ title: "Smart Links — DevMatrix" }, { name: "description", content: "Create and manage smart links." }] }),
   component: LinksPage,
 });
 
@@ -87,17 +87,17 @@ function LinksPage() {
     <div className="p-6 md:p-10">
       <header className="mb-8 flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-black tracking-tight">Smart Links</h1>
+          <h1 className="text-3xl font-semibold tracking-tight">Smart Links</h1>
           <p className="text-sm text-muted-foreground">Geo-targeted, deep-linked, expirable — with live QR.</p>
         </div>
-        <button onClick={() => setOpen(true)} className="inline-flex items-center gap-2 rounded-xl bg-[image:var(--gradient-neon)] px-4 py-2 text-sm font-semibold text-[color:var(--primary-foreground)] transition hover:opacity-90">
+        <button onClick={() => setOpen(true)} className="inline-flex items-center gap-2 rounded-xl bg-[color:var(--primary)] px-4 py-2 text-sm font-semibold text-[color:var(--primary-foreground)] transition hover:opacity-90">
           <Plus className="h-4 w-4" /> New link
         </button>
       </header>
 
       {links.length === 0 ? (
         <div className="glass p-12 text-center">
-          <QrCode className="mx-auto mb-3 h-10 w-10 text-[color:var(--neon-blue)]" />
+          <QrCode className="mx-auto mb-3 h-10 w-10 text-[color:var(--primary)]" />
           <p className="text-sm text-muted-foreground">No smart links yet. Click <b>New link</b> to create your first one.</p>
         </div>
       ) : (
@@ -124,7 +124,7 @@ function LinksPage() {
           pending={createMut.isPending}
         />
       )}
-      <style>{`.input{width:100%;border-radius:0.5rem;border:1px solid var(--input);background:var(--surface);padding:0.5rem 0.75rem;font-size:0.875rem;outline:none;transition:all .2s}.input:focus{border-color:var(--neon-blue);box-shadow:var(--glow-blue)}`}</style>
+      <style>{`.input{width:100%;border-radius:0.5rem;border:1px solid var(--input);background:var(--surface);padding:0.5rem 0.75rem;font-size:0.875rem;outline:none;transition:all .2s}.input:focus{border-color:var(--primary);box-shadow:var(--shadow-soft)}`}</style>
     </div>
   );
 }
@@ -141,7 +141,7 @@ function LinkRow({ link: l, origin, onDelete }: { link: any; origin: string; onD
           <div className="truncate text-sm font-semibold">{l.title || l.slug}</div>
           <button
             onClick={() => { navigator.clipboard.writeText(shortUrl); toast.success("Copied"); }}
-            className="mt-1 inline-flex items-center gap-1 text-xs text-[color:var(--neon-blue)] hover:underline"
+            className="mt-1 inline-flex items-center gap-1 text-xs text-[color:var(--primary)] hover:underline"
           >
             proforma.link/{l.slug} <Copy className="h-3 w-3" />
           </button>
@@ -156,7 +156,7 @@ function LinkRow({ link: l, origin, onDelete }: { link: any; origin: string; onD
         <div className="flex items-center justify-start md:justify-end gap-1">
           <button
             onClick={() => setShowQr((v) => !v)}
-            className={`rounded-lg border border-border p-2 text-xs transition hover:bg-surface-2 ${showQr ? "bg-surface-2 text-[color:var(--neon-blue)]" : "bg-surface"}`}
+            className={`rounded-lg border border-border p-2 text-xs transition hover:bg-surface-2 ${showQr ? "bg-surface-2 text-[color:var(--primary)]" : "bg-surface"}`}
             title="Toggle QR"
           >
             <QrCode className="h-3.5 w-3.5" />
@@ -171,10 +171,10 @@ function LinkRow({ link: l, origin, onDelete }: { link: any; origin: string; onD
       </div>
       {showQr && (
         <div className="mt-4 flex flex-col items-center gap-2 border-t border-border pt-4 md:flex-row md:items-start md:gap-6">
-          <QRPreview value={shortUrl} fg="#0B0F19" bg="#ffffff" size={180} />
+          <QRPreview value={shortUrl} fg="#f8fafc" bg="#ffffff" size={180} />
           <div className="text-xs text-muted-foreground">
             <div className="mb-1 font-semibold text-foreground">Dynamic QR</div>
-            <div>Points to <code className="text-[color:var(--neon-blue)]">{shortUrl}</code></div>
+            <div>Points to <code className="text-[color:var(--primary)]">{shortUrl}</code></div>
             <div className="mt-2">Edit destination or styling anytime — the QR image stays the same.</div>
           </div>
         </div>
@@ -228,7 +228,7 @@ function NewLinkModal({ form, setForm, onClose, onSubmit, pending }: {
           </Field>
 
           <Field label="Dynamic slug" hint={preview}>
-            <div className="flex items-stretch rounded-lg border border-input bg-surface overflow-hidden focus-within:border-[color:var(--neon-blue)] focus-within:shadow-[var(--glow-blue)]">
+            <div className="flex items-stretch rounded-lg border border-input bg-surface overflow-hidden focus-within:border-[color:var(--primary)] focus-within:shadow-[var(--shadow-soft)]">
               <span className="px-3 py-2 text-xs text-muted-foreground border-r border-input bg-background/40 whitespace-nowrap">proforma.link/</span>
               <input required pattern="[a-z0-9\-]+" minLength={3} value={form.slug}
                 onChange={(e) => setForm({ ...form, slug: e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, "") })}
@@ -297,7 +297,7 @@ function NewLinkModal({ form, setForm, onClose, onSubmit, pending }: {
 
         <div className="flex gap-2 border-t border-border/60 bg-background/40 px-6 py-4">
           <button type="button" onClick={onClose} className="flex-1 rounded-lg border border-input bg-surface px-3 py-2.5 text-sm hover:bg-surface-2">Cancel</button>
-          <button type="submit" form="new-link-form" disabled={pending} className="flex-1 rounded-lg bg-[image:var(--gradient-neon)] px-3 py-2.5 text-sm font-semibold text-[color:var(--primary-foreground)] disabled:opacity-60 hover:opacity-90">
+          <button type="submit" form="new-link-form" disabled={pending} className="flex-1 rounded-lg bg-[color:var(--primary)] px-3 py-2.5 text-sm font-semibold text-[color:var(--primary-foreground)] disabled:opacity-60 hover:opacity-90">
             {pending ? "Creating…" : "Create link"}
           </button>
         </div>

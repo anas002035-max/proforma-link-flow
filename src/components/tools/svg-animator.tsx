@@ -54,21 +54,21 @@ export default function SvgAnimator() {
             ref={fileRef} type="file" accept=".svg,image/svg+xml" className="hidden"
             onChange={async (e) => { const f = e.target.files?.[0]; if (f) setSvg(await f.text()); }}
           />
-          <button onClick={exportSvg} className="inline-flex items-center gap-1.5 rounded-lg bg-[image:var(--gradient-neon)] px-3 py-1.5 text-xs font-semibold text-[color:var(--primary-foreground)] hover:opacity-90">
+          <button onClick={exportSvg} className="inline-flex items-center gap-1.5 rounded-lg bg-[color:var(--primary)] px-3 py-1.5 text-xs font-semibold text-[color:var(--primary-foreground)] hover:opacity-90">
             <Download className="h-3.5 w-3.5" /> Export animated SVG
           </button>
         </div>
         <textarea
           value={svg} onChange={(e) => setSvg(e.target.value)} rows={10} spellCheck={false}
-          className="w-full resize-y rounded-lg border border-input bg-surface p-3 font-mono text-xs outline-none focus:border-[color:var(--neon-blue)]"
+          className="w-full resize-y rounded-lg border border-input bg-surface p-3 font-mono text-xs outline-none focus:border-[color:var(--primary)]"
         />
         <div className="grid gap-3 sm:grid-cols-3">
           <Field label="Target selector"><input value={selector} onChange={(e) => setSelector(e.target.value)} className="input" /></Field>
           <Field label={`Duration ${duration}s`}>
-            <input type="range" min={0.2} max={10} step={0.1} value={duration} onChange={(e) => setDuration(Number(e.target.value))} className="w-full accent-[color:var(--neon-blue)]" />
+            <input type="range" min={0.2} max={10} step={0.1} value={duration} onChange={(e) => setDuration(Number(e.target.value))} className="w-full accent-[color:var(--primary)]" />
           </Field>
           <Field label="Loop">
-            <button onClick={() => setLoop((v) => !v)} className={`h-9 w-full rounded-lg border text-xs font-semibold ${loop ? "border-[color:var(--neon-green)] text-[color:var(--neon-green)]" : "border-border text-muted-foreground"}`}>
+            <button onClick={() => setLoop((v) => !v)} className={`h-9 w-full rounded-lg border text-xs font-semibold ${loop ? "border-[color:var(--primary)] text-[color:var(--primary)]" : "border-border text-muted-foreground"}`}>
               {loop ? "Infinite" : "Once"}
             </button>
           </Field>
@@ -77,7 +77,7 @@ export default function SvgAnimator() {
         <div>
           <div className="flex items-center justify-between">
             <h3 className="text-sm font-semibold">Timeline keyframes</h3>
-            <button onClick={() => setFrames((f) => [...f, { at: 100, transform: "scale(1)", opacity: 1 }])} className="inline-flex items-center gap-1 text-xs text-[color:var(--neon-blue)] hover:underline">
+            <button onClick={() => setFrames((f) => [...f, { at: 100, transform: "scale(1)", opacity: 1 }])} className="inline-flex items-center gap-1 text-xs text-[color:var(--primary)] hover:underline">
               <Plus className="h-3.5 w-3.5" /> Add keyframe
             </button>
           </div>
@@ -98,11 +98,11 @@ export default function SvgAnimator() {
 
       <div className="space-y-4 lg:col-span-2">
         <div className="glass p-5">
-          <h3 className="text-xs font-semibold uppercase tracking-wider text-[color:var(--neon-blue)]">Live preview</h3>
+          <h3 className="text-xs font-semibold uppercase tracking-wider text-[color:var(--primary)]">Live preview</h3>
           <div className="mt-3 grid aspect-square place-items-center rounded-xl bg-surface p-6" dangerouslySetInnerHTML={{ __html: animated }} />
         </div>
         <div className="glass p-5">
-          <h3 className="text-xs font-semibold uppercase tracking-wider text-[color:var(--neon-blue)]">Generated CSS</h3>
+          <h3 className="text-xs font-semibold uppercase tracking-wider text-[color:var(--primary)]">Generated CSS</h3>
           <pre className="mt-2 max-h-56 overflow-auto rounded-lg bg-surface p-3 font-mono text-[11px] leading-relaxed">{css}</pre>
         </div>
       </div>

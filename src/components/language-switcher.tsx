@@ -5,7 +5,7 @@ export function LanguageSwitcher({ compact = false }: { compact?: boolean }) {
   const { lang, setLang, t } = useI18n();
   return (
     <label className="inline-flex items-center gap-2 rounded-lg border border-border bg-surface/60 px-2.5 py-1.5 text-xs text-muted-foreground">
-      <Globe className="h-3.5 w-3.5 text-[color:var(--neon-blue)]" />
+      <Globe className="h-3.5 w-3.5 text-[color:var(--primary)]" />
       {!compact && <span className="sr-only">{t("common.language")}</span>}
       <select
         aria-label={t("common.language")}

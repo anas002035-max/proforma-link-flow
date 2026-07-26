@@ -54,14 +54,14 @@ export default function JwtInspector() {
           onChange={(e) => setToken(e.target.value)}
           rows={10}
           spellCheck={false}
-          className="mt-2 w-full resize-y rounded-lg border border-input bg-surface p-3 font-mono text-xs leading-relaxed outline-none focus:border-[color:var(--neon-blue)]"
+          className="mt-2 w-full resize-y rounded-lg border border-input bg-surface p-3 font-mono text-xs leading-relaxed outline-none focus:border-[color:var(--primary)]"
         />
         {result?.issues && (
-          <div className={`mt-4 rounded-xl border p-4 text-sm ${result.issues.length ? "border-[color:var(--destructive)]/40 bg-[color:var(--destructive)]/10" : "border-[color:var(--neon-green)]/40 bg-[color:var(--neon-green)]/10"}`}>
+          <div className={`mt-4 rounded-xl border p-4 text-sm ${result.issues.length ? "border-[color:var(--destructive)]/40 bg-[color:var(--destructive)]/10" : "border-[color:var(--primary)]/40 bg-[color:var(--primary)]/10"}`}>
             <div className="flex items-center gap-2 font-semibold">
               {result.issues.length
                 ? <><ShieldAlert className="h-4 w-4 text-[color:var(--destructive)]" /> {result.issues.length} security finding(s)</>
-                : <><ShieldCheck className="h-4 w-4 text-[color:var(--neon-green)]" /> No structural issues detected</>}
+                : <><ShieldCheck className="h-4 w-4 text-[color:var(--primary)]" /> No structural issues detected</>}
             </div>
             <ul className="mt-2 list-disc space-y-1 pl-5 text-xs text-muted-foreground">
               {result.issues.map((i) => <li key={i}>{i}</li>)}
@@ -88,7 +88,7 @@ export default function JwtInspector() {
 function Pane({ title, data }: { title: string; data: unknown }) {
   return (
     <div className="glass p-5">
-      <h3 className="text-xs font-semibold uppercase tracking-wider text-[color:var(--neon-blue)]">{title}</h3>
+      <h3 className="text-xs font-semibold uppercase tracking-wider text-[color:var(--primary)]">{title}</h3>
       <pre className="mt-2 overflow-x-auto rounded-lg bg-surface p-3 font-mono text-xs leading-relaxed">
         {JSON.stringify(data, null, 2)}
       </pre>

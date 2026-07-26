@@ -78,7 +78,7 @@ export default function DockerArchitect() {
               <button
                 key={s.id}
                 onClick={() => setSelected((p) => on ? p.filter((x) => x !== s.id) : [...p, s.id])}
-                className={`rounded-xl border px-3 py-3 text-left text-xs font-semibold transition ${on ? "border-[color:var(--neon-green)] bg-[color:var(--neon-green)]/10 text-[color:var(--neon-green)]" : "border-border bg-surface/40 text-muted-foreground hover:bg-surface"}`}
+                className={`rounded-xl border px-3 py-3 text-left text-xs font-semibold transition ${on ? "border-[color:var(--primary)] bg-[color:var(--primary)]/10 text-[color:var(--primary)]" : "border-border bg-surface/40 text-muted-foreground hover:bg-surface"}`}
               >
                 {s.label}
                 <span className="mt-0.5 block font-mono text-[10px] font-normal opacity-70">{s.image}</span>
@@ -101,7 +101,7 @@ export default function DockerArchitect() {
             </label>
             <label className="mt-2 block">
               <span className="text-[11px] text-muted-foreground">Environment (one per line)</span>
-              <textarea rows={2} value={s.env} onChange={(e) => setConfig((p) => ({ ...p, [s.id]: { ...p[s.id], env: e.target.value } }))} className="mt-1 w-full resize-y rounded-lg border border-input bg-surface p-2 font-mono text-[11px] outline-none focus:border-[color:var(--neon-blue)]" />
+              <textarea rows={2} value={s.env} onChange={(e) => setConfig((p) => ({ ...p, [s.id]: { ...p[s.id], env: e.target.value } }))} className="mt-1 w-full resize-y rounded-lg border border-input bg-surface p-2 font-mono text-[11px] outline-none focus:border-[color:var(--primary)]" />
             </label>
           </div>
         ))}
@@ -122,7 +122,7 @@ function CodePane({ title, code }: { title: string; code: string }) {
       <div className="flex items-center justify-between">
         <h3 className="text-sm font-semibold">{title}</h3>
         <button onClick={() => { navigator.clipboard.writeText(code); setCopied(true); setTimeout(() => setCopied(false), 1500); }} className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-surface px-3 py-1.5 text-xs font-semibold hover:bg-surface-2">
-          {copied ? <Check className="h-3.5 w-3.5 text-[color:var(--neon-green)]" /> : <Copy className="h-3.5 w-3.5" />}{copied ? "Copied" : "Copy"}
+          {copied ? <Check className="h-3.5 w-3.5 text-[color:var(--primary)]" /> : <Copy className="h-3.5 w-3.5" />}{copied ? "Copied" : "Copy"}
         </button>
       </div>
       <pre className="mt-3 max-h-80 overflow-auto rounded-lg bg-surface p-3 font-mono text-[11px] leading-relaxed">{code}</pre>

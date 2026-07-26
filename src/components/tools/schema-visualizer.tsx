@@ -81,7 +81,7 @@ export default function SchemaVisualizer() {
         {tables.map((t) => (
           <div
             key={t.id}
-            className="absolute w-56 rounded-xl border border-border bg-surface-2/95 shadow-[var(--glow-blue)] backdrop-blur"
+            className="absolute w-56 rounded-xl border border-border bg-surface-2/95 shadow-[var(--shadow-soft)] backdrop-blur"
             style={{ left: t.x, top: t.y }}
           >
             <div
@@ -89,7 +89,7 @@ export default function SchemaVisualizer() {
                 const box = (e.currentTarget.parentElement as HTMLElement).getBoundingClientRect();
                 drag.current = { id: t.id, dx: e.clientX - box.left, dy: e.clientY - box.top };
               }}
-              className="flex cursor-grab items-center justify-between rounded-t-xl bg-[image:var(--gradient-neon)] px-3 py-2 text-xs font-bold text-[color:var(--primary-foreground)] active:cursor-grabbing"
+              className="flex cursor-grab items-center justify-between rounded-t-xl bg-[color:var(--primary)] px-3 py-2 text-xs font-bold text-[color:var(--primary-foreground)] active:cursor-grabbing"
             >
               <input
                 value={t.name}
@@ -117,7 +117,7 @@ export default function SchemaVisualizer() {
                   </select>
                   <button
                     onClick={() => setTables((p) => p.map((x) => x.id === t.id ? { ...x, columns: x.columns.map((y, j) => j === i ? { ...y, pk: !y.pk } : y) } : x))}
-                    className={`rounded px-1 text-[10px] font-bold ${c.pk ? "text-[color:var(--neon-green)]" : "text-muted-foreground"}`}
+                    className={`rounded px-1 text-[10px] font-bold ${c.pk ? "text-[color:var(--primary)]" : "text-muted-foreground"}`}
                   >PK</button>
                   <button onClick={() => setTables((p) => p.map((x) => x.id === t.id ? { ...x, columns: x.columns.filter((_, j) => j !== i) } : x))} className="text-muted-foreground hover:text-[color:var(--destructive)]">
                     <Trash2 className="h-3 w-3" />
@@ -126,7 +126,7 @@ export default function SchemaVisualizer() {
               ))}
               <button
                 onClick={() => setTables((p) => p.map((x) => x.id === t.id ? { ...x, columns: [...x.columns, { name: "column", type: "text", pk: false, nullable: true }] } : x))}
-                className="mt-1 inline-flex items-center gap-1 text-[11px] text-[color:var(--neon-blue)]"
+                className="mt-1 inline-flex items-center gap-1 text-[11px] text-[color:var(--primary)]"
               >
                 <Plus className="h-3 w-3" /> column
               </button>
@@ -135,7 +135,7 @@ export default function SchemaVisualizer() {
         ))}
         <button
           onClick={() => setTables((p) => [...p, { id: uid(), name: `table_${p.length + 1}`, x: 60 + p.length * 24, y: 60 + p.length * 24, columns: [{ name: "id", type: "uuid", pk: true, nullable: false }] }])}
-          className="absolute bottom-4 right-4 inline-flex items-center gap-1.5 rounded-xl bg-[image:var(--gradient-neon)] px-3 py-2 text-xs font-semibold text-[color:var(--primary-foreground)]"
+          className="absolute bottom-4 right-4 inline-flex items-center gap-1.5 rounded-xl bg-[color:var(--primary)] px-3 py-2 text-xs font-semibold text-[color:var(--primary-foreground)]"
         >
           <Plus className="h-3.5 w-3.5" /> Add table
         </button>
@@ -149,7 +149,7 @@ export default function SchemaVisualizer() {
               <div key={r.id} className="flex items-center gap-2 rounded-lg border border-border bg-surface/40 p-2 text-[11px]">
                 <Select value={r.from} onChange={(v) => setRelations((p) => p.map((x) => x.id === r.id ? { ...x, from: v } : x))} options={tables.map((t) => [t.id, t.name])} />
                 <input value={r.fromCol} onChange={(e) => setRelations((p) => p.map((x) => x.id === r.id ? { ...x, fromCol: e.target.value } : x))} className="w-16 rounded bg-surface px-1.5 py-1 outline-none" />
-                <span className="text-[color:var(--neon-blue)]">→</span>
+                <span className="text-[color:var(--primary)]">→</span>
                 <Select value={r.to} onChange={(v) => setRelations((p) => p.map((x) => x.id === r.id ? { ...x, to: v } : x))} options={tables.map((t) => [t.id, t.name])} />
                 <input value={r.toCol} onChange={(e) => setRelations((p) => p.map((x) => x.id === r.id ? { ...x, toCol: e.target.value } : x))} className="w-16 rounded bg-surface px-1.5 py-1 outline-none" />
                 <button onClick={() => setRelations((p) => p.filter((x) => x.id !== r.id))} className="ml-auto text-muted-foreground hover:text-[color:var(--destructive)]"><Trash2 className="h-3.5 w-3.5" /></button>
@@ -157,7 +157,7 @@ export default function SchemaVisualizer() {
             ))}
             <button
               onClick={() => tables[1] && setRelations((p) => [...p, { id: uid(), from: tables[1].id, fromCol: "id", to: tables[0].id, toCol: "id", kind: "1-n" }])}
-              className="inline-flex items-center gap-1 text-xs text-[color:var(--neon-blue)]"
+              className="inline-flex items-center gap-1 text-xs text-[color:var(--primary)]"
             ><Plus className="h-3.5 w-3.5" /> Add relation</button>
           </div>
         </div>
@@ -174,7 +174,7 @@ export default function SchemaVisualizer() {
                 <Wand2 className="h-3.5 w-3.5" />
               </button>
               <button onClick={() => { navigator.clipboard.writeText(sql); setCopied(true); setTimeout(() => setCopied(false), 1500); }} className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-surface px-2.5 py-1 text-xs font-semibold hover:bg-surface-2">
-                {copied ? <Check className="h-3.5 w-3.5 text-[color:var(--neon-green)]" /> : <Copy className="h-3.5 w-3.5" />}
+                {copied ? <Check className="h-3.5 w-3.5 text-[color:var(--primary)]" /> : <Copy className="h-3.5 w-3.5" />}
               </button>
             </div>
           </div>
@@ -184,7 +184,7 @@ export default function SchemaVisualizer() {
             spellCheck={false}
             rows={16}
             onChange={(e) => onSqlChange(e.target.value)}
-            className="mt-3 w-full resize-y rounded-lg border border-input bg-surface p-3 font-mono text-[11px] leading-relaxed outline-none focus:border-[color:var(--neon-blue)]"
+            className="mt-3 w-full resize-y rounded-lg border border-input bg-surface p-3 font-mono text-[11px] leading-relaxed outline-none focus:border-[color:var(--primary)]"
           />
           {sqlError && (
             <p className="mt-2 inline-flex items-center gap-1.5 text-[11px] text-[color:var(--destructive)]">

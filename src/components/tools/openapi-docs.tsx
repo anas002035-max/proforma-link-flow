@@ -16,7 +16,7 @@ type Op = {
 
 const SAMPLE = `{
   "openapi": "3.0.0",
-  "info": { "title": "Proforma API", "version": "1.0.0", "description": "Smart link routing API." },
+  "info": { "title": "DevMatrix API", "version": "1.0.0", "description": "Smart link routing API." },
   "servers": [{ "url": "https://api.proforma.link" }],
   "paths": {
     "/links": {
@@ -35,8 +35,8 @@ const SAMPLE = `{
 }`;
 
 const METHOD_COLOR: Record<string, string> = {
-  get: "text-[color:var(--neon-blue)]",
-  post: "text-[color:var(--neon-green)]",
+  get: "text-[color:var(--primary)]",
+  post: "text-[color:var(--primary)]",
   put: "text-amber-400",
   patch: "text-amber-400",
   delete: "text-[color:var(--destructive)]",
@@ -63,7 +63,7 @@ export default function OpenApiDocs() {
         </div>
         <textarea
           value={raw} onChange={(e) => setRaw(e.target.value)} rows={26} spellCheck={false}
-          className="mt-2 w-full resize-y rounded-lg border border-input bg-surface p-3 font-mono text-[11px] leading-relaxed outline-none focus:border-[color:var(--neon-blue)]"
+          className="mt-2 w-full resize-y rounded-lg border border-input bg-surface p-3 font-mono text-[11px] leading-relaxed outline-none focus:border-[color:var(--primary)]"
         />
         {error && <p className="mt-2 text-xs text-[color:var(--destructive)]">{error}</p>}
       </div>
@@ -71,7 +71,7 @@ export default function OpenApiDocs() {
       <div className="lg:col-span-3">
         {spec && (
           <div className="glass p-6">
-            <h2 className="text-2xl font-black tracking-tight">{spec.info?.title ?? "API"}</h2>
+            <h2 className="text-2xl font-semibold tracking-tight">{spec.info?.title ?? "API"}</h2>
             <p className="mt-1 text-xs text-muted-foreground">v{spec.info?.version ?? "1.0.0"} · {spec.servers?.[0]?.url ?? "no server declared"}</p>
             {spec.info?.description && <p className="mt-3 text-sm text-muted-foreground">{spec.info.description}</p>}
 
@@ -88,7 +88,7 @@ export default function OpenApiDocs() {
                 <h3 className="text-sm font-semibold">Security schemes</h3>
                 <ul className="mt-2 space-y-1 text-xs text-muted-foreground">
                   {Object.entries(spec.components.securitySchemes).map(([k, v]) => (
-                    <li key={k}><span className="font-mono text-[color:var(--neon-blue)]">{k}</span> — {v.type} {v.scheme ?? ""}</li>
+                    <li key={k}><span className="font-mono text-[color:var(--primary)]">{k}</span> — {v.type} {v.scheme ?? ""}</li>
                   ))}
                 </ul>
               </div>
@@ -116,7 +116,7 @@ function Endpoint({ path, method, op }: { path: string; method: string; op: Op }
           {op.description && <p className="text-xs text-muted-foreground">{op.description}</p>}
           {op.parameters?.length ? (
             <div>
-              <h4 className="text-xs font-semibold uppercase tracking-wider text-[color:var(--neon-blue)]">Parameters</h4>
+              <h4 className="text-xs font-semibold uppercase tracking-wider text-[color:var(--primary)]">Parameters</h4>
               <div className="mt-2 space-y-2">
                 {op.parameters.map((p) => (
                   <div key={p.name} className="flex items-center gap-2">
@@ -132,7 +132,7 @@ function Endpoint({ path, method, op }: { path: string; method: string; op: Op }
             </div>
           ) : null}
           <div>
-            <h4 className="text-xs font-semibold uppercase tracking-wider text-[color:var(--neon-blue)]">Responses</h4>
+            <h4 className="text-xs font-semibold uppercase tracking-wider text-[color:var(--primary)]">Responses</h4>
             <ul className="mt-2 space-y-1 text-xs text-muted-foreground">
               {Object.entries(op.responses ?? {}).map(([code, r]) => (
                 <li key={code}><span className="font-mono text-foreground">{code}</span> — {r.description}</li>

@@ -19,7 +19,7 @@ export function QRPreview({ value, fg, bg, size = 240 }: { value: string; fg: st
 
   return (
     <div className="flex flex-col items-center gap-3">
-      <div className="rounded-2xl p-4" style={{ background: bg, boxShadow: "var(--glow-blue)" }}>
+      <div className="rounded-2xl p-4" style={{ background: bg, boxShadow: "var(--shadow-soft)" }}>
         <canvas ref={ref} />
       </div>
       <button onClick={download} className="rounded-lg border border-input bg-surface px-3 py-1.5 text-xs hover:bg-surface-2">Download PNG</button>

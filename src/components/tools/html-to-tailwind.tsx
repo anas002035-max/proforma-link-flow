@@ -103,8 +103,8 @@ export function htmlToTailwind(input: string): string {
   });
 }
 
-const SAMPLE = `<div style="display:flex; align-items:center; gap:12px; padding:16px; background:#0B0F19; border-radius:16px">
-  <span style="font-weight:600; font-size:14px; color:#38bdf8">Proforma Hub</span>
+const SAMPLE = `<div style="display:flex; align-items:center; gap:12px; padding:16px; background:#f8fafc; border-radius:16px">
+  <span style="font-weight:600; font-size:14px; color:#38bdf8">DevMatrix</span>
 </div>`;
 
 export default function HtmlToTailwind() {
@@ -121,7 +121,7 @@ export default function HtmlToTailwind() {
           onChange={(e) => setInput(e.target.value)}
           rows={18}
           spellCheck={false}
-          className="mt-2 w-full resize-y rounded-lg border border-input bg-surface p-3 font-mono text-xs leading-relaxed outline-none focus:border-[color:var(--neon-blue)]"
+          className="mt-2 w-full resize-y rounded-lg border border-input bg-surface p-3 font-mono text-xs leading-relaxed outline-none focus:border-[color:var(--primary)]"
         />
       </div>
       <div className="glass p-5">
@@ -131,7 +131,7 @@ export default function HtmlToTailwind() {
             onClick={() => { navigator.clipboard.writeText(output); setCopied(true); setTimeout(() => setCopied(false), 1500); }}
             className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-surface px-3 py-1.5 text-xs font-semibold hover:bg-surface-2"
           >
-            {copied ? <Check className="h-3.5 w-3.5 text-[color:var(--neon-green)]" /> : <Copy className="h-3.5 w-3.5" />}
+            {copied ? <Check className="h-3.5 w-3.5 text-[color:var(--primary)]" /> : <Copy className="h-3.5 w-3.5" />}
             {copied ? "Copied" : "Copy"}
           </button>
         </div>

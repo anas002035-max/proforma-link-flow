@@ -19,7 +19,7 @@ function NotFoundComponent() {
   return (
     <div className="flex min-h-screen items-center justify-center px-4">
       <div className="glass max-w-md p-10 text-center">
-        <h1 className="text-6xl font-black tracking-tight text-foreground">404</h1>
+        <h1 className="text-6xl font-semibold tracking-tight text-foreground">404</h1>
         <p className="mt-3 text-sm text-muted-foreground">This page slipped through the routing engine.</p>
         <Link to="/" className="mt-6 inline-flex rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:opacity-90">
           Back home
@@ -51,10 +51,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Proforma Hub — Smart Links, QR & Link-in-Bio" },
+      { title: "DevMatrix — Smart Links, QR & Link-in-Bio" },
       { name: "description", content: "All-in-One Smart Link, Dynamic QR, and Link-in-Bio platform with geo-targeting and deep linking." },
       { property: "og:type", content: "website" },
-      { property: "og:title", content: "Proforma Hub" },
+      { property: "og:title", content: "DevMatrix" },
       { property: "og:description", content: "Smart Links, Dynamic QR, and Link-in-Bio — routed through a premium engine." },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -71,15 +71,16 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en">
       <head><HeadContent /></head>
-      <body className="dark">
+      <body>
         {children}
         <Scripts />
       </body>
     </html>
   );
 }
+
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
@@ -96,7 +97,7 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <I18nProvider>
         <Outlet />
-        <Toaster theme="dark" position="top-right" />
+        <Toaster theme="light" position="top-right" />
       </I18nProvider>
     </QueryClientProvider>
   );

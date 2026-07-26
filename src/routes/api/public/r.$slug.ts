@@ -59,7 +59,7 @@ async function handle(request: Request, slug: string): Promise<Response> {
     const intent = deepLinkFor(destination, dev.os);
     if (intent) {
       const html = `<!doctype html><html><head><meta charset="utf-8"><title>Opening app…</title>
-<meta name="viewport" content="width=device-width,initial-scale=1"><style>body{background:#0B0F19;color:#e5e7eb;font-family:system-ui;display:grid;place-items:center;height:100vh;margin:0}a{color:#22d3ee}</style></head>
+<meta name="viewport" content="width=device-width,initial-scale=1"><style>body{background:#f8fafc;color:#e5e7eb;font-family:system-ui;display:grid;place-items:center;height:100vh;margin:0}a{color:#22d3ee}</style></head>
 <body><div style="text-align:center"><p>Opening app…</p><p><a href="${escapeHtml(destination)}">Continue in browser</a></p></div>
 <script>
 (function(){var t=setTimeout(function(){location.replace(${JSON.stringify(destination)})},1500);window.addEventListener('pagehide',function(){clearTimeout(t)});location.replace(${JSON.stringify(intent)});})();

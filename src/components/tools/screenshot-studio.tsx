@@ -12,7 +12,7 @@ export default function ScreenshotStudio() {
   const [image, setImage] = useState<string | null>(null);
   const [headline, setHeadline] = useState("Route every click");
   const [sub, setSub] = useState("Geo-targeting built in");
-  const [bg1, setBg1] = useState("#0B0F19");
+  const [bg1, setBg1] = useState("#f8fafc");
   const [bg2, setBg2] = useState("#0f2c3f");
   const [showSafe, setShowSafe] = useState(true);
   const fileRef = useRef<HTMLInputElement>(null);
@@ -73,7 +73,7 @@ export default function ScreenshotStudio() {
           <span className="text-xs font-medium text-muted-foreground">Device preset</span>
           <div className="mt-2 grid grid-cols-3 gap-2">
             {DEVICES.map((d) => (
-              <button key={d.id} onClick={() => setDevice(d)} className={`rounded-lg border px-2 py-2 text-[11px] font-semibold ${device.id === d.id ? "border-[color:var(--neon-blue)] text-[color:var(--neon-blue)]" : "border-border text-muted-foreground"}`}>
+              <button key={d.id} onClick={() => setDevice(d)} className={`rounded-lg border px-2 py-2 text-[11px] font-semibold ${device.id === d.id ? "border-[color:var(--primary)] text-[color:var(--primary)]" : "border-border text-muted-foreground"}`}>
                 {d.name}
               </button>
             ))}
@@ -89,10 +89,10 @@ export default function ScreenshotStudio() {
           <label className="block"><span className="text-xs font-medium text-muted-foreground">Gradient A</span><input type="color" value={bg1} onChange={(e) => setBg1(e.target.value)} className="mt-1 h-9 w-full rounded-lg border border-input bg-surface" /></label>
           <label className="block"><span className="text-xs font-medium text-muted-foreground">Gradient B</span><input type="color" value={bg2} onChange={(e) => setBg2(e.target.value)} className="mt-1 h-9 w-full rounded-lg border border-input bg-surface" /></label>
         </div>
-        <button onClick={() => setShowSafe((v) => !v)} className={`w-full rounded-lg border px-3 py-2 text-xs font-semibold ${showSafe ? "border-[color:var(--neon-green)] text-[color:var(--neon-green)]" : "border-border text-muted-foreground"}`}>
+        <button onClick={() => setShowSafe((v) => !v)} className={`w-full rounded-lg border px-3 py-2 text-xs font-semibold ${showSafe ? "border-[color:var(--primary)] text-[color:var(--primary)]" : "border-border text-muted-foreground"}`}>
           {showSafe ? "Safe zones visible" : "Safe zones hidden"}
         </button>
-        <button onClick={exportPng} className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[image:var(--gradient-neon)] px-4 py-2.5 text-sm font-semibold text-[color:var(--primary-foreground)] hover:opacity-90">
+        <button onClick={exportPng} className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[color:var(--primary)] px-4 py-2.5 text-sm font-semibold text-[color:var(--primary-foreground)] hover:opacity-90">
           <Download className="h-4 w-4" /> Export {device.w}×{device.h}
         </button>
       </div>
@@ -103,17 +103,17 @@ export default function ScreenshotStudio() {
           style={{ aspectRatio: `${device.w} / ${device.h}`, background: `linear-gradient(140deg, ${bg1}, ${bg2})` }}
         >
           <div className="absolute inset-x-0 top-[4%] px-5 text-center">
-            <div className="text-lg font-black leading-tight">{headline}</div>
+            <div className="text-lg font-semibold leading-tight">{headline}</div>
             <div className="mt-1 text-[11px] text-muted-foreground">{sub}</div>
           </div>
           <div
-            className="absolute left-1/2 w-[78%] -translate-x-1/2 overflow-hidden rounded-2xl border-2 border-[color:var(--neon-blue)] bg-surface-2"
+            className="absolute left-1/2 w-[78%] -translate-x-1/2 overflow-hidden rounded-2xl border-2 border-[color:var(--primary)] bg-surface-2"
             style={{ top: "24%", height: "62%", backgroundImage: image ? `url(${image})` : undefined, backgroundSize: "cover", backgroundPosition: "center" }}
           />
           {showSafe && (
             <>
-              <div className="pointer-events-none absolute inset-x-0 top-0 border-b border-dashed border-[color:var(--neon-green)]/60" style={{ height: `${device.safeTop * 100}%` }} />
-              <div className="pointer-events-none absolute inset-x-0 bottom-0 border-t border-dashed border-[color:var(--neon-green)]/60" style={{ height: `${device.safeBottom * 100}%` }} />
+              <div className="pointer-events-none absolute inset-x-0 top-0 border-b border-dashed border-[color:var(--primary)]/60" style={{ height: `${device.safeTop * 100}%` }} />
+              <div className="pointer-events-none absolute inset-x-0 bottom-0 border-t border-dashed border-[color:var(--primary)]/60" style={{ height: `${device.safeBottom * 100}%` }} />
             </>
           )}
         </div>
