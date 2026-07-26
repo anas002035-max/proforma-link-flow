@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { QrCode, Link2, Globe2, Sparkles, ArrowRight, Zap } from "lucide-react";
+import { QrCode, Link2, Globe2, Sparkles, ArrowRight } from "lucide-react";
 import { LanguageSwitcher } from "@/components/language-switcher";
+import { BrandMark } from "@/components/brand-logo";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -18,37 +19,32 @@ function Landing() {
   return (
     <div className="min-h-screen">
       <header className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
-        <div className="flex items-center gap-2">
-          <div className="grid h-9 w-9 place-items-center rounded-xl bg-[image:var(--gradient-neon)] text-[color:var(--primary-foreground)]">
-            <Zap className="h-5 w-5" />
-          </div>
-          <span className="text-lg font-black tracking-tight">DevMatrix</span>
-        </div>
+        <BrandMark />
         <nav className="flex items-center gap-2">
           <LanguageSwitcher />
           <Link to="/tools" className="rounded-lg px-4 py-2 text-sm text-muted-foreground hover:text-foreground">Tools</Link>
           <Link to="/auth" className="rounded-lg px-4 py-2 text-sm text-muted-foreground hover:text-foreground">Sign in</Link>
-          <Link to="/auth" className="rounded-lg bg-[image:var(--gradient-neon)] px-4 py-2 text-sm font-semibold text-[color:var(--primary-foreground)] hover:opacity-90">
+          <Link to="/auth" className="rounded-lg bg-[color:var(--primary)] px-4 py-2 text-sm font-semibold text-[color:var(--primary-foreground)] hover:opacity-90">
             Get started
           </Link>
         </nav>
       </header>
 
       <section className="mx-auto max-w-6xl px-6 pt-12 pb-20 text-center">
-        <div className="inline-flex items-center gap-2 rounded-full border border-border bg-surface/40 px-3 py-1 text-xs text-muted-foreground">
-          <Sparkles className="h-3.5 w-3.5 text-[color:var(--neon-green)]" />
+        <div className="inline-flex items-center gap-2 rounded-full border border-border bg-surface px-3 py-1 text-xs text-muted-foreground">
+          <Sparkles className="h-3.5 w-3.5 text-[color:var(--primary)]" />
           Early access — pro tier launching soon
         </div>
-        <h1 className="mt-6 text-5xl font-black tracking-tight sm:text-7xl">
+        <h1 className="mt-6 text-5xl font-semibold tracking-[-0.03em] sm:text-6xl">
           Route every click
           <br />
-          <span className="bg-[image:var(--gradient-neon)] bg-clip-text text-transparent">the smart way.</span>
+          <span className="text-[color:var(--primary)]">the smart way.</span>
         </h1>
         <p className="mx-auto mt-6 max-w-2xl text-base text-muted-foreground sm:text-lg">
           Shortened smart links with geo-targeting and deep-linking, dynamic QR codes you can update after printing, and a modular link-in-bio builder — all in one dashboard.
         </p>
         <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-          <Link to="/auth" className="group inline-flex items-center gap-2 rounded-xl bg-[image:var(--gradient-neon)] px-6 py-3 text-sm font-semibold text-[color:var(--primary-foreground)] shadow-[var(--glow-blue)] hover:opacity-90">
+          <Link to="/auth" className="group inline-flex items-center gap-2 rounded-xl bg-[color:var(--primary)] px-6 py-3 text-sm font-semibold text-[color:var(--primary-foreground)] shadow-[var(--shadow-soft)] hover:opacity-90">
             Launch your dashboard <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
           </Link>
         </div>

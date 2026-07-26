@@ -1,5 +1,5 @@
 import { createFileRoute, Outlet, Link } from "@tanstack/react-router";
-import { Zap } from "lucide-react";
+import { BrandMark } from "@/components/brand-logo";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { DevProToggle } from "@/components/dev-pro-toggle";
 import { useI18n } from "@/lib/i18n";
@@ -12,14 +12,9 @@ function ToolsLayout() {
   const { t } = useI18n();
   return (
     <div className="min-h-screen">
-      <header className="sticky top-0 z-40 border-b border-border/60 bg-[color:var(--background)]/80 backdrop-blur-xl">
+      <header className="sticky top-0 z-40 border-b border-border/60 bg-surface">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-5 py-3 md:px-8">
-          <Link to="/" className="flex items-center gap-2">
-            <span className="grid h-8 w-8 place-items-center rounded-lg bg-[image:var(--gradient-neon)] text-[color:var(--primary-foreground)]">
-              <Zap className="h-4 w-4" />
-            </span>
-            <span className="font-black tracking-tight">DevMatrix</span>
-          </Link>
+          <Link to="/"><BrandMark /></Link>
           <div className="flex items-center gap-2">
             <LanguageSwitcher />
             <DevProToggle />
