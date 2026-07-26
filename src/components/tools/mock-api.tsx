@@ -82,11 +82,11 @@ export default function MockApi() {
                 <input type="number" value={r.delay} onChange={(e) => setRoutes((p) => p.map((x) => x.id === r.id ? { ...x, delay: Number(e.target.value) } : x))} className="input w-20" title="Delay ms" />
                 <button onClick={() => setRoutes((p) => p.filter((x) => x.id !== r.id))} className="text-muted-foreground hover:text-[color:var(--destructive)]"><Trash2 className="h-4 w-4" /></button>
               </div>
-              <textarea
-                value={r.body} rows={3} spellCheck={false}
-                onChange={(e) => setRoutes((p) => p.map((x) => x.id === r.id ? { ...x, body: e.target.value } : x))}
-                className="mt-2 w-full resize-y rounded-lg border border-input bg-surface p-2 font-mono text-[11px] outline-none focus:border-[color:var(--neon-blue)]"
+              <JsonBody
+                value={r.body}
+                onChange={(v) => setRoutes((p) => p.map((x) => x.id === r.id ? { ...x, body: v } : x))}
               />
+
             </div>
           ))}
         </div>
