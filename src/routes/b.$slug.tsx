@@ -46,14 +46,19 @@ export const Route = createFileRoute("/b/$slug")({
 
 function PublicBio() {
   const { page, blocks } = Route.useLoaderData();
+  const theme = (page.theme ?? null) as { bg?: string; fg?: string; accent?: string } | null;
+  const bg = theme?.bg ?? "#f8fafc";
+  const fg = theme?.fg ?? "#1e293b";
+  const accent = theme?.accent ?? "#4f46e5";
   return (
-    <div className="min-h-screen py-10 px-4 flex flex-col items-center">
+    <div className="flex min-h-screen flex-col items-center px-4 py-12" style={{ background: bg, color: fg }}>
       <div className="w-full max-w-md text-center">
-        {page.avatar_url && <img src={page.avatar_url} alt="" className="mx-auto h-24 w-24 rounded-full object-cover shadow-[var(--glow-blue)]" />}
-        {!page.avatar_url && <div className="mx-auto h-24 w-24 rounded-full bg-[image:var(--gradient-neon)]" />}
-        <h1 className="mt-4 text-2xl font-black">{page.display_name || page.slug}</h1>
-        {page.bio && <p className="mt-2 text-sm text-muted-foreground">{page.bio}</p>}
-        <div className="mt-6 space-y-3">
+        {page.avatar_url && <img src={page.avatar_url} alt={`${page.display_name || page.slug} avatar`} className="mx-auto h-24 w-24 rounded-full object-cover shadow-[var(--shadow-soft)]" />}
+        {!page.avatar_url && <div className="mx-auto h-24 w-24 rounded-full" style={{ background: accent, opacity: 0.25 }} />}
+        <h1 className="mt-5 text-2xl font-semibold tracking-tight">{page.display_name || page.slug}</h1>
+        {page.bio && <p className="mt-2 text-sm opacity-70">{page.bio}</p>}
+        <div className="mt-7 space-y-3">
+
           {(blocks as Array<{ id: string; block_type: string; data: Record<string, unknown> }>).map((b) => {
             if (b.block_type === "header") return <div key={b.id} className="pt-3 text-xs font-bold uppercase tracking-wider text-muted-foreground">{String(b.data.text)}</div>;
             if (b.block_type === "coupon") {
