@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as ExpiredRouteImport } from './routes/expired'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as ToolsRouteRouteImport } from './routes/tools/route'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as BSlugRouteImport } from './routes/b.$slug'
@@ -33,6 +34,11 @@ const ExpiredRoute = ExpiredRouteImport.update({
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ToolsRouteRoute = ToolsRouteRouteImport.update({
+  id: '/tools',
+  path: '/tools',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
@@ -103,6 +109,7 @@ const ApiPublicRSlugRoute = ApiPublicRSlugRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/tools': typeof ToolsRouteRoute
   '/auth': typeof AuthRoute
   '/expired': typeof ExpiredRoute
   '/analytics': typeof AuthenticatedAnalyticsRoute
@@ -119,6 +126,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/tools': typeof ToolsRouteRoute
   '/auth': typeof AuthRoute
   '/expired': typeof ExpiredRoute
   '/analytics': typeof AuthenticatedAnalyticsRoute
@@ -137,6 +145,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/tools': typeof ToolsRouteRoute
   '/auth': typeof AuthRoute
   '/expired': typeof ExpiredRoute
   '/_authenticated/analytics': typeof AuthenticatedAnalyticsRoute
@@ -155,6 +164,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/tools'
     | '/auth'
     | '/expired'
     | '/analytics'
@@ -171,6 +181,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/tools'
     | '/auth'
     | '/expired'
     | '/analytics'
@@ -188,6 +199,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/_authenticated'
+    | '/tools'
     | '/auth'
     | '/expired'
     | '/_authenticated/analytics'
@@ -206,6 +218,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  ToolsRouteRoute: typeof ToolsRouteRoute
   AuthRoute: typeof AuthRoute
   ExpiredRoute: typeof ExpiredRoute
   BSlugRoute: typeof BSlugRoute
@@ -226,6 +239,13 @@ declare module '@tanstack/react-router' {
       path: '/auth'
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/tools': {
+      id: '/tools'
+      path: '/tools'
+      fullPath: '/tools'
+      preLoaderRoute: typeof ToolsRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated': {
@@ -361,6 +381,7 @@ const AuthenticatedRouteRouteWithChildren =
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  ToolsRouteRoute: ToolsRouteRoute,
   AuthRoute: AuthRoute,
   ExpiredRoute: ExpiredRoute,
   BSlugRoute: BSlugRoute,
