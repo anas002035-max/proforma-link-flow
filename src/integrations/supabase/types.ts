@@ -50,13 +50,6 @@ export type Database = {
             referencedRelation: "smart_links"
             referencedColumns: ["id"]
           },
-          {
-            foreignKeyName: "analytics_logs_link_id_fkey"
-            columns: ["link_id"]
-            isOneToOne: false
-            referencedRelation: "smart_links_public"
-            referencedColumns: ["id"]
-          },
         ]
       }
       bio_blocks: {
@@ -190,13 +183,6 @@ export type Database = {
             referencedRelation: "smart_links"
             referencedColumns: ["id"]
           },
-          {
-            foreignKeyName: "qr_codes_link_id_fkey"
-            columns: ["link_id"]
-            isOneToOne: false
-            referencedRelation: "smart_links_public"
-            referencedColumns: ["id"]
-          },
         ]
       }
       smart_links: {
@@ -246,39 +232,7 @@ export type Database = {
       }
     }
     Views: {
-      smart_links_public: {
-        Row: {
-          deep_link_enabled: boolean | null
-          default_url: string | null
-          expires_at: string | null
-          geo_rules: Json | null
-          id: string | null
-          is_active: boolean | null
-          slug: string | null
-          title: string | null
-        }
-        Insert: {
-          deep_link_enabled?: boolean | null
-          default_url?: string | null
-          expires_at?: string | null
-          geo_rules?: Json | null
-          id?: string | null
-          is_active?: boolean | null
-          slug?: string | null
-          title?: string | null
-        }
-        Update: {
-          deep_link_enabled?: boolean | null
-          default_url?: string | null
-          expires_at?: string | null
-          geo_rules?: Json | null
-          id?: string | null
-          is_active?: boolean | null
-          slug?: string | null
-          title?: string | null
-        }
-        Relationships: []
-      }
+      [_ in never]: never
     }
     Functions: {
       [_ in never]: never
