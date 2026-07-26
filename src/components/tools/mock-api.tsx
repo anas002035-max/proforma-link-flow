@@ -122,3 +122,40 @@ export default function MockApi() {
     </div>
   );
 }
+
+function JsonBody({ value, onChange }: { value: string; onChange: (v: string) => void }) {
+  const [expanded, setExpanded] = useState(true);
+  const error = useMemo(() => {
+    if (!value.trim()) return "Body is empty";
+    try { JSON.parse(value); return ""; } catch (e) { return (e as Error).message; }
+  }, [value]);
+
+  return (
+    <div className="mt-2">
+      <div className="flex flex-wrap items-center gap-2">
+        <span className="text-[11px] font-semibold text-muted-foreground">Response JSON</span>
+        {error
+          ? <span className="inline-flex items-center gap-1 text-[10px] text-[color:var(--destructive)]"><AlertTriangle className="h-3 w-3" /> {error}</span>
+          : <span className="inline-flex items-center gap-1 text-[10px] text-[color:var(--neon-green)]"><Check className="h-3 w-3" /> valid JSON</span>}
+        <button
+          onClick={() => { try { onChange(JSON.stringify(JSON.parse(value), null, 2)); } catch { /* ignore */ } }}
+          disabled={!!error}
+          className="ml-auto rounded border border-border px-2 py-0.5 text-[10px] font-semibold hover:bg-surface-2 disabled:opacity-40"
+        >
+          Format
+        </button>
+        <button onClick={() => setExpanded((v) => !v)} className="rounded border border-border px-2 py-0.5 text-[10px] font-semibold hover:bg-surface-2">
+          {expanded ? "Collapse" : "Expand editor"}
+        </button>
+      </div>
+      <textarea
+        value={value}
+        rows={expanded ? 12 : 3}
+        spellCheck={false}
+        placeholder={'{\n  "items": [\n    { "id": 1 }\n  ]\n}'}
+        onChange={(e) => onChange(e.target.value)}
+        className={`mt-2 w-full resize-y rounded-lg border bg-surface p-2 font-mono text-[11px] leading-relaxed outline-none ${error ? "border-[color:var(--destructive)]/60" : "border-input focus:border-[color:var(--neon-blue)]"}`}
+      />
+    </div>
+  );
+}
