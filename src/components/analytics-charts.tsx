@@ -6,7 +6,7 @@ import {
 
 type LogRow = { country: string | null; device_type: string | null; os: string | null; timestamp: string };
 
-const NEON = ["#22d3ee", "#a3ff5b", "#f472b6", "#facc15", "#a78bfa", "#38bdf8", "#4ade80", "#fb923c"];
+const NEON = ["#4f46e5", "#6366f1", "#818cf8", "#a5b4fc", "#0ea5e9", "#38bdf8", "#7c3aed", "#c4b5fd"];
 
 const COUNTRY_NAMES: Record<string, string> = {
   US: "United States", GB: "United Kingdom", CA: "Canada", AU: "Australia",
@@ -43,15 +43,15 @@ export function TrafficLineChart({ logs, days = 14 }: { logs: LogRow[]; days?: n
         <LineChart data={data} margin={{ top: 10, right: 12, left: -12, bottom: 0 }}>
           <defs>
             <linearGradient id="lg" x1="0" y1="0" x2="1" y2="0">
-              <stop offset="0%" stopColor="#22d3ee" />
-              <stop offset="100%" stopColor="#a3ff5b" />
+              <stop offset="0%" stopColor="#4f46e5" />
+              <stop offset="100%" stopColor="#818cf8" />
             </linearGradient>
           </defs>
-          <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
-          <XAxis dataKey="date" stroke="rgba(255,255,255,0.5)" fontSize={11} />
-          <YAxis stroke="rgba(255,255,255,0.5)" fontSize={11} allowDecimals={false} />
-          <Tooltip contentStyle={{ background: "#f8fafc", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 8, fontSize: 12 }} />
-          <Line type="monotone" dataKey="clicks" stroke="url(#lg)" strokeWidth={2.5} dot={{ fill: "#22d3ee", r: 3 }} activeDot={{ r: 5 }} />
+          <CartesianGrid strokeDasharray="3 3" stroke="rgba(30,41,59,0.08)" />
+          <XAxis dataKey="date" stroke="rgba(30,41,59,0.45)" fontSize={11} />
+          <YAxis stroke="rgba(30,41,59,0.45)" fontSize={11} allowDecimals={false} />
+          <Tooltip contentStyle={{ background: "#ffffff", border: "1px solid rgba(30,41,59,0.12)", boxShadow: "0 8px 24px -14px rgba(30,41,59,0.25)", borderRadius: 8, fontSize: 12 }} />
+          <Line type="monotone" dataKey="clicks" stroke="url(#lg)" strokeWidth={2.5} dot={{ fill: "#4f46e5", r: 3 }} activeDot={{ r: 5 }} />
         </LineChart>
       </ResponsiveContainer>
     </div>
@@ -88,9 +88,9 @@ export function BreakdownPie({ logs, kind, title }: {
           <ResponsiveContainer>
             <PieChart>
               <Pie data={data} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={40} outerRadius={72} paddingAngle={2}>
-                {data.map((_, i) => <Cell key={i} fill={NEON[i % NEON.length]} stroke="rgba(11,15,25,0.8)" />)}
+                {data.map((_, i) => <Cell key={i} fill={NEON[i % NEON.length]} stroke="#ffffff" />)}
               </Pie>
-              <Tooltip contentStyle={{ background: "#f8fafc", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 8, fontSize: 12 }} />
+              <Tooltip contentStyle={{ background: "#ffffff", border: "1px solid rgba(30,41,59,0.12)", boxShadow: "0 8px 24px -14px rgba(30,41,59,0.25)", borderRadius: 8, fontSize: 12 }} />
               <Legend wrapperStyle={{ fontSize: 11 }} iconType="circle" />
             </PieChart>
           </ResponsiveContainer>

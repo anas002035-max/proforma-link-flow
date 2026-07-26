@@ -7,7 +7,6 @@ import { TrafficLineChart, BreakdownPie } from "@/components/analytics-charts";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { DevProToggle } from "@/components/dev-pro-toggle";
 import { ToolCategoryGrid } from "@/components/tool-category-grid";
-import { SupportWidget } from "@/components/support-widget";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({
@@ -103,10 +102,7 @@ function Dashboard() {
             </div>
           )}
         </div>
-        <div className="space-y-4">
-          <BreakdownPie logs={logs} kind="device_type" title="Devices" />
-          <SupportWidget />
-        </div>
+        <BreakdownPie logs={logs} kind="device_type" title="Devices" />
       </div>
     </div>
   );
