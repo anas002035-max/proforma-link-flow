@@ -8,7 +8,7 @@ import { LanguageSwitcher } from "@/components/language-switcher";
 import { DevProToggle } from "@/components/dev-pro-toggle";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
-  head: () => ({ meta: [{ title: "Dashboard — Proforma Hub" }, { name: "description", content: "Your Proforma Hub dashboard." }] }),
+  head: () => ({ meta: [{ title: "Dashboard — DevMatrix" }, { name: "description", content: "Your DevMatrix dashboard." }] }),
   component: Dashboard,
 });
 

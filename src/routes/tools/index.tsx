@@ -7,9 +7,9 @@ import { useI18n } from "@/lib/i18n";
 export const Route = createFileRoute("/tools/")({
   head: () => ({
     meta: [
-      { title: "Developer Tools — Proforma Hub" },
+      { title: "Developer Tools — DevMatrix" },
       { name: "description", content: "Twelve browser-native engineering tools: SVG animation, log parsing, JWT inspection, Docker architecture, schema design and more." },
-      { property: "og:title", content: "Proforma Hub Engineering Tools" },
+      { property: "og:title", content: "DevMatrix Engineering Tools" },
       { property: "og:description", content: "Twelve precision developer utilities that run entirely client-side." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -39,7 +39,7 @@ function ToolsIndex() {
 
       <div className="glass mt-14 flex flex-wrap items-center justify-between gap-4 p-6">
         <div>
-          <h2 className="text-lg font-bold">Proforma Pro — $2/month</h2>
+          <h2 className="text-lg font-bold">DevMatrix Pro — $2/month</h2>
           <p className="mt-1 text-sm text-muted-foreground">Unlimited smart links, dynamic QR, premium bio themes and all six Pro engineering tools.</p>
         </div>
         <Link to="/billing" className="inline-flex items-center gap-2 rounded-xl bg-[image:var(--gradient-neon)] px-5 py-2.5 text-sm font-semibold text-[color:var(--primary-foreground)] hover:opacity-90">

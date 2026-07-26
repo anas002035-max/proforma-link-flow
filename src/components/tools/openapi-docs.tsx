@@ -16,7 +16,7 @@ type Op = {
 
 const SAMPLE = `{
   "openapi": "3.0.0",
-  "info": { "title": "Proforma API", "version": "1.0.0", "description": "Smart link routing API." },
+  "info": { "title": "DevMatrix API", "version": "1.0.0", "description": "Smart link routing API." },
   "servers": [{ "url": "https://api.proforma.link" }],
   "paths": {
     "/links": {

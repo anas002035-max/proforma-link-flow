@@ -34,7 +34,7 @@ export const Route = createFileRoute("/b/$slug")({
   head: ({ loaderData }) => ({
     meta: loaderData
       ? [
-          { title: `${loaderData.page.display_name || loaderData.page.slug} — Proforma Hub` },
+          { title: `${loaderData.page.display_name || loaderData.page.slug} — DevMatrix` },
           { name: "description", content: loaderData.page.bio || "Link-in-bio page" },
           { property: "og:title", content: loaderData.page.display_name || loaderData.page.slug },
           { property: "og:description", content: loaderData.page.bio || "Link-in-bio page" },

@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import { Zap } from "lucide-react";
 
 export const Route = createFileRoute("/auth")({
-  head: () => ({ meta: [{ title: "Sign in — Proforma Hub" }, { name: "description", content: "Sign in to your Proforma Hub dashboard." }] }),
+  head: () => ({ meta: [{ title: "Sign in — DevMatrix" }, { name: "description", content: "Sign in to your DevMatrix dashboard." }] }),
   component: AuthPage,
 });
 
@@ -57,7 +57,7 @@ function AuthPage() {
       <div className="w-full max-w-md">
         <Link to="/" className="flex items-center justify-center gap-2 mb-8">
           <div className="grid h-9 w-9 place-items-center rounded-xl bg-[image:var(--gradient-neon)]"><Zap className="h-5 w-5 text-[color:var(--primary-foreground)]" /></div>
-          <span className="text-lg font-black">Proforma Hub</span>
+          <span className="text-lg font-black">DevMatrix</span>
         </Link>
         <div className="glass p-8">
           <h1 className="text-2xl font-bold">{mode === "signin" ? "Welcome back" : "Create account"}</h1>

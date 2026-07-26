@@ -5,9 +5,9 @@ import { LanguageSwitcher } from "@/components/language-switcher";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Proforma Hub — Smart Links, Dynamic QR & Link-in-Bio" },
+      { title: "DevMatrix — Smart Links, Dynamic QR & Link-in-Bio" },
       { name: "description", content: "One platform for shortened smart links, geo-targeted routing, dynamic QR codes, and link-in-bio pages." },
-      { property: "og:title", content: "Proforma Hub" },
+      { property: "og:title", content: "DevMatrix" },
       { property: "og:description", content: "Smart Links, Dynamic QR, and Link-in-Bio." },
     ],
   }),
@@ -22,7 +22,7 @@ function Landing() {
           <div className="grid h-9 w-9 place-items-center rounded-xl bg-[image:var(--gradient-neon)] text-[color:var(--primary-foreground)]">
             <Zap className="h-5 w-5" />
           </div>
-          <span className="text-lg font-black tracking-tight">Proforma Hub</span>
+          <span className="text-lg font-black tracking-tight">DevMatrix</span>
         </div>
         <nav className="flex items-center gap-2">
           <LanguageSwitcher />
@@ -61,7 +61,7 @@ function Landing() {
       </section>
 
       <footer className="border-t border-border/60 py-8 text-center text-xs text-muted-foreground">
-        © {new Date().getFullYear()} Proforma Hub
+        © {new Date().getFullYear()} DevMatrix
       </footer>
     </div>
   );

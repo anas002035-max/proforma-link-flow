@@ -9,7 +9,7 @@ import { toast } from "sonner";
 import { TrafficLineChart, BreakdownPie } from "@/components/analytics-charts";
 
 export const Route = createFileRoute("/_authenticated/links/$id")({
-  head: () => ({ meta: [{ title: "Link details — Proforma Hub" }, { name: "description", content: "Link analytics and QR customizer." }] }),
+  head: () => ({ meta: [{ title: "Link details — DevMatrix" }, { name: "description", content: "Link analytics and QR customizer." }] }),
   component: LinkDetail,
 });
 

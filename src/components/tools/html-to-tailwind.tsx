@@ -104,7 +104,7 @@ export function htmlToTailwind(input: string): string {
 }
 
 const SAMPLE = `<div style="display:flex; align-items:center; gap:12px; padding:16px; background:#0B0F19; border-radius:16px">
-  <span style="font-weight:600; font-size:14px; color:#38bdf8">Proforma Hub</span>
+  <span style="font-weight:600; font-size:14px; color:#38bdf8">DevMatrix</span>
 </div>`;
 
 export default function HtmlToTailwind() {

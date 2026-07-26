@@ -35,7 +35,7 @@ function AuthedLayout() {
           <div className="grid h-8 w-8 place-items-center rounded-lg bg-[image:var(--gradient-neon)]">
             <Zap className="h-4 w-4 text-[color:var(--primary-foreground)]" />
           </div>
-          <span className="font-black tracking-tight">Proforma</span>
+          <span className="font-black tracking-tight">DevMatrix</span>
         </Link>
         <div className="mb-2 px-3 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/70">{t("nav.core")}</div>
         <nav className="flex flex-col gap-1">

@@ -18,7 +18,7 @@ function ToolsLayout() {
             <span className="grid h-8 w-8 place-items-center rounded-lg bg-[image:var(--gradient-neon)] text-[color:var(--primary-foreground)]">
               <Zap className="h-4 w-4" />
             </span>
-            <span className="font-black tracking-tight">Proforma Hub</span>
+            <span className="font-black tracking-tight">DevMatrix</span>
           </Link>
           <div className="flex items-center gap-2">
             <LanguageSwitcher />

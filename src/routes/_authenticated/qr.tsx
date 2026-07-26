@@ -8,7 +8,7 @@ import { useState } from "react";
 import { sanitizeUrl, isValidUrl } from "@/lib/url";
 
 export const Route = createFileRoute("/_authenticated/qr")({
-  head: () => ({ meta: [{ title: "QR Codes — Proforma Hub" }, { name: "description", content: "Design and download dynamic QR codes." }] }),
+  head: () => ({ meta: [{ title: "QR Codes — DevMatrix" }, { name: "description", content: "Design and download dynamic QR codes." }] }),
   component: QRPage,
 });
 

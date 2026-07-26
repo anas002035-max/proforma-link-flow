@@ -9,7 +9,7 @@ import { QRPreview } from "@/components/qr-preview";
 import { sanitizeUrl, isValidUrl } from "@/lib/url";
 
 export const Route = createFileRoute("/_authenticated/links")({
-  head: () => ({ meta: [{ title: "Smart Links — Proforma Hub" }, { name: "description", content: "Create and manage smart links." }] }),
+  head: () => ({ meta: [{ title: "Smart Links — DevMatrix" }, { name: "description", content: "Create and manage smart links." }] }),
   component: LinksPage,
 });
 

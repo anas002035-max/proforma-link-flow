@@ -4,7 +4,7 @@ import { Clock } from "lucide-react";
 export const Route = createFileRoute("/expired")({
   head: () => ({
     meta: [
-      { title: "Offer Expired — Proforma Hub" },
+      { title: "Offer Expired — DevMatrix" },
       { name: "description", content: "This link or offer has expired." },
       { name: "robots", content: "noindex" },
     ],
@@ -21,7 +21,7 @@ function Expired() {
         </div>
         <h1 className="mt-6 text-3xl font-black tracking-tight">Offer Expired</h1>
         <p className="mt-3 text-sm text-muted-foreground">This link or promotion is no longer active. Check back with the sender for a fresh one.</p>
-        <Link to="/" className="mt-6 inline-flex rounded-lg border border-border bg-surface px-4 py-2 text-sm hover:bg-surface-2">Go to Proforma Hub</Link>
+        <Link to="/" className="mt-6 inline-flex rounded-lg border border-border bg-surface px-4 py-2 text-sm hover:bg-surface-2">Go to DevMatrix</Link>
       </div>
     </div>
   );

@@ -3,7 +3,7 @@ import { Check, Sparkles, Zap } from "lucide-react";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/billing")({
-  head: () => ({ meta: [{ title: "Billing & Plans — Proforma Hub" }, { name: "description", content: "Upgrade to Proforma Pro." }] }),
+  head: () => ({ meta: [{ title: "Billing & Plans — DevMatrix" }, { name: "description", content: "Upgrade to DevMatrix Pro." }] }),
   component: BillingPage,
 });
 

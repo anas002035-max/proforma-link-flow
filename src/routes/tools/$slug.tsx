@@ -27,9 +27,9 @@ export const Route = createFileRoute("/tools/$slug")({
     if (!tool) return {};
     return {
       meta: [
-        { title: `${tool.name} — Proforma Hub` },
+        { title: `${tool.name} — DevMatrix` },
         { name: "description", content: tool.seoIntro.slice(0, 155) },
-        { property: "og:title", content: `${tool.name} — Proforma Hub` },
+        { property: "og:title", content: `${tool.name} — DevMatrix` },
         { property: "og:description", content: tool.seoTitle },
         { property: "og:type", content: "website" },
         { name: "twitter:card", content: "summary_large_image" },

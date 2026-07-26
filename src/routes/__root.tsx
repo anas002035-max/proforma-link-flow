@@ -51,10 +51,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Proforma Hub — Smart Links, QR & Link-in-Bio" },
+      { title: "DevMatrix — Smart Links, QR & Link-in-Bio" },
       { name: "description", content: "All-in-One Smart Link, Dynamic QR, and Link-in-Bio platform with geo-targeting and deep linking." },
       { property: "og:type", content: "website" },
-      { property: "og:title", content: "Proforma Hub" },
+      { property: "og:title", content: "DevMatrix" },
       { property: "og:description", content: "Smart Links, Dynamic QR, and Link-in-Bio — routed through a premium engine." },
       { name: "twitter:card", content: "summary_large_image" },
     ],

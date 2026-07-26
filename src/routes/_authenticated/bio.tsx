@@ -9,7 +9,7 @@ import { Plus, GripVertical, Trash2, ArrowUp, ArrowDown, ExternalLink } from "lu
 type Block = { id?: string; block_type: "link" | "social" | "coupon" | "header"; position: number; data: Record<string, unknown> };
 
 export const Route = createFileRoute("/_authenticated/bio")({
-  head: () => ({ meta: [{ title: "Bio Builder — Proforma Hub" }, { name: "description", content: "Build your link-in-bio page." }] }),
+  head: () => ({ meta: [{ title: "Bio Builder — DevMatrix" }, { name: "description", content: "Build your link-in-bio page." }] }),
   component: BioBuilder,
 });
 

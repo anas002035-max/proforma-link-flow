@@ -6,7 +6,7 @@ import { TrafficLineChart, BreakdownPie } from "@/components/analytics-charts";
 import { MousePointerClick, Globe, Smartphone, Link2 } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/analytics")({
-  head: () => ({ meta: [{ title: "Analytics — Proforma Hub" }, { name: "description", content: "Live traffic analytics." }] }),
+  head: () => ({ meta: [{ title: "Analytics — DevMatrix" }, { name: "description", content: "Live traffic analytics." }] }),
   component: AnalyticsPage,
 });
 

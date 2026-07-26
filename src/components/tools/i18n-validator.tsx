@@ -21,8 +21,8 @@ export default function I18nValidator() {
   const [baseline, setBaseline] = useState<string>("");
   const [error, setError] = useState("");
   const [mode, setMode] = useState<"files" | "paste">("files");
-  const [baseText, setBaseText] = useState('{\n  "app": { "title": "Proforma Hub", "cta": "Get started" }\n}');
-  const [targetText, setTargetText] = useState('{\n  "app": { "title": "Proforma Hub" }\n}');
+  const [baseText, setBaseText] = useState('{\n  "app": { "title": "DevMatrix", "cta": "Get started" }\n}');
+  const [targetText, setTargetText] = useState('{\n  "app": { "title": "DevMatrix" }\n}');
 
   function validatePasted() {
     let baseJson: Record<string, unknown>;
