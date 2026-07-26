@@ -4,6 +4,8 @@ import { useQuery } from "@tanstack/react-query";
 import { listMyLinks, getAllAnalytics } from "@/lib/links.functions";
 import { Link2, QrCode, MousePointerClick, TrendingUp, Plus, Wrench, BarChart3 } from "lucide-react";
 import { TrafficLineChart, BreakdownPie } from "@/components/analytics-charts";
+import { LanguageSwitcher } from "@/components/language-switcher";
+import { DevProToggle } from "@/components/dev-pro-toggle";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({ meta: [{ title: "Dashboard — Proforma Hub" }, { name: "description", content: "Your Proforma Hub dashboard." }] }),
@@ -29,9 +31,13 @@ function Dashboard() {
           <h1 className="text-3xl font-black tracking-tight">Dashboard</h1>
           <p className="text-sm text-muted-foreground">Welcome back, {ctx.user.email}</p>
         </div>
-        <Link to="/links" className="inline-flex items-center gap-2 rounded-xl bg-[image:var(--gradient-neon)] px-4 py-2 text-sm font-semibold text-[color:var(--primary-foreground)] hover:opacity-90">
-          <Plus className="h-4 w-4" /> New smart link
-        </Link>
+        <div className="flex flex-wrap items-center gap-2">
+          <LanguageSwitcher />
+          <DevProToggle />
+          <Link to="/links" className="inline-flex items-center gap-2 rounded-xl bg-[image:var(--gradient-neon)] px-4 py-2 text-sm font-semibold text-[color:var(--primary-foreground)] hover:opacity-90">
+            <Plus className="h-4 w-4" /> New smart link
+          </Link>
+        </div>
       </header>
 
       <div className="grid grid-cols-2 gap-4 md:grid-cols-4">

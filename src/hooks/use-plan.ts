@@ -1,7 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { useDevPro } from "@/hooks/use-dev-pro";
 
 export function usePlan() {
+  const { devPro } = useDevPro();
   const { data, isLoading } = useQuery({
     queryKey: ["my-plan"],
     queryFn: async () => {
@@ -17,8 +19,9 @@ export function usePlan() {
     staleTime: 60_000,
   });
   return {
-    isLoading,
+    isLoading: devPro ? false : isLoading,
     signedIn: data?.signedIn ?? false,
-    isPro: (data?.tier ?? "free") !== "free",
+    isPro: devPro || (data?.tier ?? "free") !== "free",
+    devPro,
   };
 }
