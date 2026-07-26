@@ -15,24 +15,17 @@ async function handle(request: Request, slug: string): Promise<Response> {
   const url = new URL(request.url);
   const origin = url.origin;
 
-  const key = process.env.SUPABASE_PUBLISHABLE_KEY!;
-  const supabasePublic = createClient<Database>(process.env.SUPABASE_URL!, key, {
-    auth: { persistSession: false },
-    global: {
-      fetch: (input, init) => {
-        const h = new Headers(init?.headers);
-        if (key.startsWith("sb_") && h.get("Authorization") === `Bearer ${key}`) h.delete("Authorization");
-        h.set("apikey", key);
-        return fetch(input, { ...init, headers: h });
-      },
-    },
-  });
+  // Link rows contain sensitive columns (password_hash), so they are never
+  // exposed through the Data API to anon. Resolve slugs server-side only and
+  // project just the fields needed for redirection.
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
-  const { data: link } = await supabasePublic
+  const { data: link } = await supabaseAdmin
     .from("smart_links")
     .select("id, default_url, geo_rules, deep_link_enabled, expires_at, is_active")
     .eq("slug", slug)
     .maybeSingle();
+
 
   if (!link || !link.is_active) {
     return Response.redirect(origin + "/expired", 302);
