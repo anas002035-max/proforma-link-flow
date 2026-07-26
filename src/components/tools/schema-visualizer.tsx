@@ -1,5 +1,5 @@
-import { useMemo, useRef, useState } from "react";
-import { Plus, Trash2, Copy, Check } from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { Plus, Trash2, Copy, Check, Wand2, AlertTriangle } from "lucide-react";
 
 type Column = { name: string; type: string; pk: boolean; nullable: boolean };
 type Table = { id: string; name: string; x: number; y: number; columns: Column[] };
@@ -28,9 +28,30 @@ export default function SchemaVisualizer() {
   ]);
   const [dialect, setDialect] = useState<"postgres" | "mysql">("postgres");
   const [copied, setCopied] = useState(false);
+  const [source, setSource] = useState<"canvas" | "sql">("canvas");
+  const [sql, setSql] = useState("");
+  const [sqlError, setSqlError] = useState("");
   const drag = useRef<{ id: string; dx: number; dy: number } | null>(null);
 
   const ddl = useMemo(() => compile(tables, relations, dialect), [tables, relations, dialect]);
+
+  useEffect(() => {
+    if (source === "canvas") setSql(ddl);
+  }, [ddl, source]);
+
+  function onSqlChange(text: string) {
+    setSource("sql");
+    setSql(text);
+    const parsed = parseSql(text, tables);
+    if (!parsed) {
+      setSqlError("No CREATE TABLE statement found — the canvas keeps its current shape.");
+      return;
+    }
+    setSqlError("");
+    setTables(parsed.tables);
+    setRelations(parsed.relations);
+  }
+
 
   function onMove(e: React.MouseEvent) {
     if (!drag.current) return;
@@ -142,20 +163,36 @@ export default function SchemaVisualizer() {
         </div>
 
         <div className="glass p-5">
-          <div className="flex items-center justify-between gap-2">
-            <h3 className="text-sm font-semibold">Migration output</h3>
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <h3 className="text-sm font-semibold">Migration SQL <span className="font-normal text-muted-foreground">(editable)</span></h3>
             <div className="flex items-center gap-2">
-              <select value={dialect} onChange={(e) => setDialect(e.target.value as "postgres" | "mysql")} className="rounded-lg border border-input bg-surface px-2 py-1 text-xs outline-none [&>option]:bg-[color:var(--popover)]">
+              <select value={dialect} onChange={(e) => { setDialect(e.target.value as "postgres" | "mysql"); setSource("canvas"); }} className="rounded-lg border border-input bg-surface px-2 py-1 text-xs outline-none [&>option]:bg-[color:var(--popover)]">
                 <option value="postgres">PostgreSQL</option>
                 <option value="mysql">MySQL</option>
               </select>
-              <button onClick={() => { navigator.clipboard.writeText(ddl); setCopied(true); setTimeout(() => setCopied(false), 1500); }} className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-surface px-2.5 py-1 text-xs font-semibold hover:bg-surface-2">
+              <button onClick={() => { setSource("canvas"); setSqlError(""); setSql(ddl); }} title="Regenerate from canvas" className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-surface px-2.5 py-1 text-xs font-semibold hover:bg-surface-2">
+                <Wand2 className="h-3.5 w-3.5" />
+              </button>
+              <button onClick={() => { navigator.clipboard.writeText(sql); setCopied(true); setTimeout(() => setCopied(false), 1500); }} className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-surface px-2.5 py-1 text-xs font-semibold hover:bg-surface-2">
                 {copied ? <Check className="h-3.5 w-3.5 text-[color:var(--neon-green)]" /> : <Copy className="h-3.5 w-3.5" />}
               </button>
             </div>
           </div>
-          <pre className="mt-3 max-h-72 overflow-auto rounded-lg bg-surface p-3 font-mono text-[11px] leading-relaxed">{ddl}</pre>
+          <p className="mt-1 text-[11px] text-muted-foreground">Paste any PostgreSQL/MySQL DDL — the canvas re-draws tables and foreign-key lines as you type.</p>
+          <textarea
+            value={sql}
+            spellCheck={false}
+            rows={16}
+            onChange={(e) => onSqlChange(e.target.value)}
+            className="mt-3 w-full resize-y rounded-lg border border-input bg-surface p-3 font-mono text-[11px] leading-relaxed outline-none focus:border-[color:var(--neon-blue)]"
+          />
+          {sqlError && (
+            <p className="mt-2 inline-flex items-center gap-1.5 text-[11px] text-[color:var(--destructive)]">
+              <AlertTriangle className="h-3.5 w-3.5" /> {sqlError}
+            </p>
+          )}
         </div>
+
       </div>
     </div>
   );
@@ -182,4 +219,118 @@ function compile(tables: Table[], relations: Relation[], dialect: "postgres" | "
     }).filter(Boolean);
     return `CREATE TABLE ${t.name} (\n${[...cols, ...fks].join(",\n")}\n);`;
   }).join("\n\n");
+}
+
+const TYPE_ALIASES: [RegExp, string][] = [
+  [/^uuid|^char\(36\)/i, "uuid"],
+  [/^(text|varchar|character|string|nvarchar|citext)/i, "text"],
+  [/^(bigint|bigserial|int8)/i, "bigint"],
+  [/^(smallint|integer|int|serial|int4|mediumint|tinyint\(1\))/i, "integer"],
+  [/^(bool)/i, "boolean"],
+  [/^(numeric|decimal|real|double|float|money)/i, "numeric"],
+  [/^(jsonb|json)/i, "jsonb"],
+  [/^(timestamptz|timestamp|datetime)/i, "timestamptz"],
+  [/^date/i, "date"],
+];
+
+function normalizeType(raw: string) {
+  const t = raw.trim();
+  if (/^tinyint\s*\(\s*1\s*\)/i.test(t)) return "boolean";
+  for (const [re, out] of TYPE_ALIASES) if (re.test(t)) return out;
+  return "text";
+}
+
+function splitTopLevel(body: string) {
+  const parts: string[] = [];
+  let depth = 0, current = "", quote = "";
+  for (const ch of body) {
+    if (quote) {
+      current += ch;
+      if (ch === quote) quote = "";
+      continue;
+    }
+    if (ch === "'" || ch === '"' || ch === "`") { quote = ch; current += ch; continue; }
+    if (ch === "(") depth++;
+    if (ch === ")") depth--;
+    if (ch === "," && depth === 0) { parts.push(current); current = ""; continue; }
+    current += ch;
+  }
+  if (current.trim()) parts.push(current);
+  return parts.map((p) => p.trim()).filter(Boolean);
+}
+
+const clean = (s: string) => s.replace(/["`\[\]]/g, "").replace(/^[\w]+\./, "").trim();
+
+/** Parse raw DDL into canvas tables + relations. Returns null when nothing parseable is found. */
+function parseSql(sqlText: string, previous: Table[]): { tables: Table[]; relations: Relation[] } | null {
+  const text = sqlText.replace(/--[^\n]*/g, "").replace(/\/\*[\s\S]*?\*\//g, "");
+  const re = /CREATE\s+TABLE\s+(?:IF\s+NOT\s+EXISTS\s+)?([`"\[\]\w.]+)\s*\(/gi;
+  const parsedTables: Table[] = [];
+  type PendingFk = { fromTable: string; fromCol: string; toTable: string; toCol: string };
+  const pending: PendingFk[] = [];
+
+  let m: RegExpExecArray | null;
+  let index = 0;
+  while ((m = re.exec(text))) {
+    const start = m.index + m[0].length;
+    let depth = 1, i = start;
+    while (i < text.length && depth > 0) {
+      if (text[i] === "(") depth++;
+      else if (text[i] === ")") depth--;
+      i++;
+    }
+    if (depth !== 0) continue;
+    const body = text.slice(start, i - 1);
+    const name = clean(m[1]);
+    const prior = previous.find((p) => p.name === name);
+    const table: Table = {
+      id: prior?.id ?? uid(),
+      name,
+      x: prior?.x ?? 40 + (index % 3) * 250,
+      y: prior?.y ?? 40 + Math.floor(index / 3) * 220,
+      columns: [],
+    };
+    const pkNames = new Set<string>();
+
+    for (const part of splitTopLevel(body)) {
+      const fkMatch = part.match(/FOREIGN\s+KEY\s*\(([^)]+)\)\s*REFERENCES\s+([`"\[\]\w.]+)\s*\(([^)]+)\)/i);
+      if (fkMatch) {
+        pending.push({ fromTable: name, fromCol: clean(fkMatch[1]), toTable: clean(fkMatch[2]), toCol: clean(fkMatch[3]) });
+        continue;
+      }
+      const pkMatch = part.match(/^(?:CONSTRAINT\s+\S+\s+)?PRIMARY\s+KEY\s*\(([^)]+)\)/i);
+      if (pkMatch) {
+        pkMatch[1].split(",").forEach((c) => pkNames.add(clean(c)));
+        continue;
+      }
+      if (/^(CONSTRAINT|UNIQUE|CHECK|INDEX|KEY|EXCLUDE)\b/i.test(part)) continue;
+
+      const colMatch = part.match(/^([`"\[\]\w]+)\s+([\w]+(?:\s*\([^)]*\))?(?:\s+(?:WITH|WITHOUT)\s+TIME\s+ZONE)?)/i);
+      if (!colMatch) continue;
+      const colName = clean(colMatch[1]);
+      const inlineFk = part.match(/REFERENCES\s+([`"\[\]\w.]+)\s*\(([^)]+)\)/i);
+      if (inlineFk) pending.push({ fromTable: name, fromCol: colName, toTable: clean(inlineFk[1]), toCol: clean(inlineFk[2]) });
+      table.columns.push({
+        name: colName,
+        type: normalizeType(colMatch[2]),
+        pk: /PRIMARY\s+KEY/i.test(part),
+        nullable: !/NOT\s+NULL/i.test(part) && !/PRIMARY\s+KEY/i.test(part),
+      });
+    }
+
+    table.columns = table.columns.map((c) => (pkNames.has(c.name) ? { ...c, pk: true, nullable: false } : c));
+    parsedTables.push(table);
+    index++;
+  }
+
+  if (!parsedTables.length) return null;
+
+  const relations: Relation[] = pending.flatMap((p) => {
+    const from = parsedTables.find((t) => t.name === p.fromTable);
+    const to = parsedTables.find((t) => t.name === p.toTable);
+    if (!from || !to) return [];
+    return [{ id: uid(), from: from.id, fromCol: p.fromCol, to: to.id, toCol: p.toCol, kind: "1-n" as const }];
+  });
+
+  return { tables: parsedTables, relations };
 }

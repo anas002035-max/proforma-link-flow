@@ -20,6 +20,23 @@ export default function I18nValidator() {
   const [files, setFiles] = useState<LocaleFile[]>([]);
   const [baseline, setBaseline] = useState<string>("");
   const [error, setError] = useState("");
+  const [mode, setMode] = useState<"files" | "paste">("files");
+  const [baseText, setBaseText] = useState('{\n  "app": { "title": "Proforma Hub", "cta": "Get started" }\n}');
+  const [targetText, setTargetText] = useState('{\n  "app": { "title": "Proforma Hub" }\n}');
+
+  function validatePasted() {
+    let baseJson: Record<string, unknown>;
+    let targetJson: Record<string, unknown>;
+    try { baseJson = JSON.parse(baseText); } catch { setError("Baseline JSON is invalid."); return; }
+    try { targetJson = JSON.parse(targetText); } catch { setError("Target JSON is invalid."); return; }
+    setError("");
+    setFiles([
+      { name: "baseline.json", json: baseJson },
+      { name: "target.json", json: targetJson },
+    ]);
+    setBaseline("baseline.json");
+  }
+
 
   async function onFiles(list: FileList | null) {
     if (!list) return;
@@ -54,13 +71,52 @@ export default function I18nValidator() {
   return (
     <div className="space-y-4">
       <div className="glass p-5">
-        <label className="flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-border bg-surface/40 p-10 text-center hover:border-[color:var(--neon-blue)]">
-          <Upload className="h-6 w-6 text-[color:var(--neon-blue)]" />
-          <span className="text-sm font-semibold">Drop locale JSON files</span>
-          <span className="text-xs text-muted-foreground">en.json, fr.json, ja.json … multiple files supported</span>
-          <input type="file" accept="application/json,.json" multiple className="hidden" onChange={(e) => onFiles(e.target.files)} />
-        </label>
+        <div className="mb-4 inline-flex rounded-lg border border-border bg-surface/60 p-1 text-xs font-semibold">
+          <button
+            onClick={() => setMode("files")}
+            className={`rounded-md px-3 py-1.5 transition-colors duration-200 ${mode === "files" ? "bg-[image:var(--gradient-neon)] text-[color:var(--primary-foreground)]" : "text-muted-foreground hover:text-foreground"}`}
+          >Drop files</button>
+          <button
+            onClick={() => setMode("paste")}
+            className={`rounded-md px-3 py-1.5 transition-colors duration-200 ${mode === "paste" ? "bg-[image:var(--gradient-neon)] text-[color:var(--primary-foreground)]" : "text-muted-foreground hover:text-foreground"}`}
+          >Paste JSON texts instead</button>
+        </div>
+
+        {mode === "files" ? (
+          <label className="flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-border bg-surface/40 p-10 text-center hover:border-[color:var(--neon-blue)]">
+            <Upload className="h-6 w-6 text-[color:var(--neon-blue)]" />
+            <span className="text-sm font-semibold">Drop locale JSON files</span>
+            <span className="text-xs text-muted-foreground">en.json, fr.json, ja.json … multiple files supported</span>
+            <input type="file" accept="application/json,.json" multiple className="hidden" onChange={(e) => onFiles(e.target.files)} />
+          </label>
+        ) : (
+          <div className="space-y-3">
+            <div className="grid gap-3 md:grid-cols-2">
+              <label className="block">
+                <span className="text-xs font-semibold text-muted-foreground">Baseline JSON (e.g. en)</span>
+                <textarea
+                  value={baseText} onChange={(e) => setBaseText(e.target.value)} rows={12} spellCheck={false}
+                  className="mt-1 w-full resize-y rounded-lg border border-input bg-surface p-3 font-mono text-[11px] leading-relaxed outline-none focus:border-[color:var(--neon-blue)]"
+                />
+              </label>
+              <label className="block">
+                <span className="text-xs font-semibold text-muted-foreground">Target JSON (e.g. fr)</span>
+                <textarea
+                  value={targetText} onChange={(e) => setTargetText(e.target.value)} rows={12} spellCheck={false}
+                  className="mt-1 w-full resize-y rounded-lg border border-input bg-surface p-3 font-mono text-[11px] leading-relaxed outline-none focus:border-[color:var(--neon-blue)]"
+                />
+              </label>
+            </div>
+            <button
+              onClick={validatePasted}
+              className="rounded-lg bg-[image:var(--gradient-neon)] px-4 py-2 text-xs font-semibold text-[color:var(--primary-foreground)] transition-opacity duration-200 hover:opacity-90"
+            >
+              Validate translations
+            </button>
+          </div>
+        )}
         {error && <p className="mt-3 text-xs text-[color:var(--destructive)]">{error}</p>}
+
         {files.length > 0 && (
           <div className="mt-4 flex flex-wrap items-center gap-3">
             <span className="text-xs text-muted-foreground">Baseline</span>
