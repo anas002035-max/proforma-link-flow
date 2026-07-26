@@ -20,7 +20,11 @@ const SAMPLE =
 export default function JwtInspector() {
   const [token, setToken] = useState(SAMPLE);
 
-  const result = useMemo(() => {
+  const result = useMemo<
+    | null
+    | { error: string; header?: undefined; payload?: undefined; issues?: undefined; alg?: undefined }
+    | { error?: undefined; header: Record<string, unknown>; payload: Record<string, unknown>; issues: string[]; alg: string }
+  >(() => {
     const raw = token.trim().replace(/^Bearer\s+/i, "");
     if (!raw) return null;
     const parts = raw.split(".");
@@ -52,7 +56,7 @@ export default function JwtInspector() {
           spellCheck={false}
           className="mt-2 w-full resize-y rounded-lg border border-input bg-surface p-3 font-mono text-xs leading-relaxed outline-none focus:border-[color:var(--neon-blue)]"
         />
-        {result && "issues" in result && (
+        {result?.issues && (
           <div className={`mt-4 rounded-xl border p-4 text-sm ${result.issues.length ? "border-[color:var(--destructive)]/40 bg-[color:var(--destructive)]/10" : "border-[color:var(--neon-green)]/40 bg-[color:var(--neon-green)]/10"}`}>
             <div className="flex items-center gap-2 font-semibold">
               {result.issues.length
@@ -67,10 +71,10 @@ export default function JwtInspector() {
       </div>
 
       <div className="space-y-4">
-        {result && "error" in result && (
+        {result?.error && (
           <div className="glass p-5 text-sm text-[color:var(--destructive)]">{result.error}</div>
         )}
-        {result && "header" in result && (
+        {result?.header && (
           <>
             <Pane title="Header" data={result.header} />
             <Pane title="Payload" data={result.payload} />
