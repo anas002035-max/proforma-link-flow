@@ -56,8 +56,8 @@ function AuthPage() {
     <div className="min-h-screen flex items-center justify-center px-4">
       <div className="w-full max-w-md">
         <Link to="/" className="flex items-center justify-center gap-2 mb-8">
-          <div className="grid h-9 w-9 place-items-center rounded-xl bg-[image:var(--gradient-neon)]"><Zap className="h-5 w-5 text-[color:var(--primary-foreground)]" /></div>
-          <span className="text-lg font-black">DevMatrix</span>
+          <div className="grid h-9 w-9 place-items-center rounded-xl bg-[color:var(--primary)]"><Zap className="h-5 w-5 text-[color:var(--primary-foreground)]" /></div>
+          <span className="text-lg font-semibold">DevMatrix</span>
         </Link>
         <div className="glass p-8">
           <h1 className="text-2xl font-bold">{mode === "signin" ? "Welcome back" : "Create account"}</h1>
@@ -73,9 +73,9 @@ function AuthPage() {
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-3">
-            <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" className="w-full rounded-lg border border-input bg-surface px-3 py-2.5 text-sm outline-none focus:border-[color:var(--neon-blue)] focus:shadow-[var(--glow-blue)]" />
-            <input type="password" required minLength={6} value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" className="w-full rounded-lg border border-input bg-surface px-3 py-2.5 text-sm outline-none focus:border-[color:var(--neon-blue)] focus:shadow-[var(--glow-blue)]" />
-            <button type="submit" disabled={loading} className="w-full rounded-lg bg-[image:var(--gradient-neon)] px-4 py-2.5 text-sm font-semibold text-[color:var(--primary-foreground)] hover:opacity-90 disabled:opacity-50">
+            <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" className="w-full rounded-lg border border-input bg-surface px-3 py-2.5 text-sm outline-none focus:border-[color:var(--primary)] focus:shadow-[var(--shadow-soft)]" />
+            <input type="password" required minLength={6} value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" className="w-full rounded-lg border border-input bg-surface px-3 py-2.5 text-sm outline-none focus:border-[color:var(--primary)] focus:shadow-[var(--shadow-soft)]" />
+            <button type="submit" disabled={loading} className="w-full rounded-lg bg-[color:var(--primary)] px-4 py-2.5 text-sm font-semibold text-[color:var(--primary-foreground)] hover:opacity-90 disabled:opacity-50">
               {loading ? "Please wait…" : mode === "signin" ? "Sign in" : "Create account"}
             </button>
           </form>

@@ -19,7 +19,7 @@ function LinkDetail() {
   const save = useServerFn(updateQrStyle);
   const { data, isLoading } = useQuery({ queryKey: ["link", id], queryFn: () => fetch({ data: { id } }) });
 
-  const [fg, setFg] = useState("#0B0F19");
+  const [fg, setFg] = useState("#f8fafc");
   const [bg, setBg] = useState("#FFFFFF");
 
   useEffect(() => {
@@ -42,8 +42,8 @@ function LinkDetail() {
     <div className="p-6 md:p-10">
       <Link to="/links" className="mb-6 inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"><ArrowLeft className="h-4 w-4" /> All links</Link>
       <header className="mb-6">
-        <h1 className="text-3xl font-black tracking-tight">{data.link.title || data.link.slug}</h1>
-        <p className="text-sm text-[color:var(--neon-blue)]">{shortUrl}</p>
+        <h1 className="text-3xl font-semibold tracking-tight">{data.link.title || data.link.slug}</h1>
+        <p className="text-sm text-[color:var(--primary)]">{shortUrl}</p>
       </header>
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
@@ -59,7 +59,7 @@ function LinkDetail() {
               <input type="color" value={bg} onChange={(e) => setBg(e.target.value)} className="mt-1 h-9 w-full rounded border border-input bg-surface" />
             </label>
           </div>
-          <button onClick={() => saveMut.mutate()} disabled={saveMut.isPending} className="mt-4 w-full rounded-lg bg-[image:var(--gradient-neon)] px-3 py-2 text-sm font-semibold text-[color:var(--primary-foreground)]">
+          <button onClick={() => saveMut.mutate()} disabled={saveMut.isPending} className="mt-4 w-full rounded-lg bg-[color:var(--primary)] px-3 py-2 text-sm font-semibold text-[color:var(--primary-foreground)]">
             {saveMut.isPending ? "Saving…" : "Save style"}
           </button>
         </div>
@@ -121,7 +121,7 @@ function MiniStat({ label, value }: { label: string; value: number | string }) {
   return (
     <div className="rounded-lg border border-border bg-surface/50 p-3">
       <div className="flex items-center gap-1 text-[10px] uppercase tracking-wider text-muted-foreground"><MousePointerClick className="h-3 w-3" />{label}</div>
-      <div className="mt-1 text-xl font-black text-[color:var(--neon-blue)]">{value}</div>
+      <div className="mt-1 text-xl font-semibold text-[color:var(--primary)]">{value}</div>
     </div>
   );
 }

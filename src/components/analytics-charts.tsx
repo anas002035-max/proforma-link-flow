@@ -50,7 +50,7 @@ export function TrafficLineChart({ logs, days = 14 }: { logs: LogRow[]; days?: n
           <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
           <XAxis dataKey="date" stroke="rgba(255,255,255,0.5)" fontSize={11} />
           <YAxis stroke="rgba(255,255,255,0.5)" fontSize={11} allowDecimals={false} />
-          <Tooltip contentStyle={{ background: "#0B0F19", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 8, fontSize: 12 }} />
+          <Tooltip contentStyle={{ background: "#f8fafc", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 8, fontSize: 12 }} />
           <Line type="monotone" dataKey="clicks" stroke="url(#lg)" strokeWidth={2.5} dot={{ fill: "#22d3ee", r: 3 }} activeDot={{ r: 5 }} />
         </LineChart>
       </ResponsiveContainer>
@@ -90,7 +90,7 @@ export function BreakdownPie({ logs, kind, title }: {
               <Pie data={data} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={40} outerRadius={72} paddingAngle={2}>
                 {data.map((_, i) => <Cell key={i} fill={NEON[i % NEON.length]} stroke="rgba(11,15,25,0.8)" />)}
               </Pie>
-              <Tooltip contentStyle={{ background: "#0B0F19", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 8, fontSize: 12 }} />
+              <Tooltip contentStyle={{ background: "#f8fafc", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 8, fontSize: 12 }} />
               <Legend wrapperStyle={{ fontSize: 11 }} iconType="circle" />
             </PieChart>
           </ResponsiveContainer>

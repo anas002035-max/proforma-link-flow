@@ -61,7 +61,7 @@ export default function JsDeobfuscator() {
           onChange={(e) => setInput(e.target.value)}
           rows={20}
           spellCheck={false}
-          className="mt-2 w-full resize-y rounded-lg border border-input bg-surface p-3 font-mono text-xs leading-relaxed outline-none focus:border-[color:var(--neon-blue)]"
+          className="mt-2 w-full resize-y rounded-lg border border-input bg-surface p-3 font-mono text-xs leading-relaxed outline-none focus:border-[color:var(--primary)]"
         />
         <p className="mt-2 text-[11px] text-muted-foreground">Passes: hex/unicode escape decoding → bracket member normalisation → re-indentation.</p>
       </div>
@@ -72,7 +72,7 @@ export default function JsDeobfuscator() {
             onClick={() => { navigator.clipboard.writeText(output); setCopied(true); setTimeout(() => setCopied(false), 1500); }}
             className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-surface px-3 py-1.5 text-xs font-semibold hover:bg-surface-2"
           >
-            {copied ? <Check className="h-3.5 w-3.5 text-[color:var(--neon-green)]" /> : <Copy className="h-3.5 w-3.5" />}{copied ? "Copied" : "Copy"}
+            {copied ? <Check className="h-3.5 w-3.5 text-[color:var(--primary)]" /> : <Copy className="h-3.5 w-3.5" />}{copied ? "Copied" : "Copy"}
           </button>
         </div>
         <pre className="mt-2 h-[30rem] overflow-auto rounded-lg bg-surface p-3 font-mono text-xs leading-relaxed">{output}</pre>

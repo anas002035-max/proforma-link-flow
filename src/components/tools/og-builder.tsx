@@ -9,7 +9,7 @@ export default function OgBuilder() {
   const [align, setAlign] = useState<"left" | "center">("left");
   const [accent, setAccent] = useState("#38bdf8");
   const [accent2, setAccent2] = useState("#4ade80");
-  const [bg, setBg] = useState("#0B0F19");
+  const [bg, setBg] = useState("#f8fafc");
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
@@ -68,7 +68,7 @@ export default function OgBuilder() {
         </div>
         <div className="flex gap-2">
           {(["left", "center"] as const).map((a) => (
-            <button key={a} onClick={() => setAlign(a)} className={`flex-1 rounded-lg border px-3 py-2 text-xs font-semibold capitalize ${align === a ? "border-[color:var(--neon-blue)] text-[color:var(--neon-blue)]" : "border-border text-muted-foreground"}`}>{a}</button>
+            <button key={a} onClick={() => setAlign(a)} className={`flex-1 rounded-lg border px-3 py-2 text-xs font-semibold capitalize ${align === a ? "border-[color:var(--primary)] text-[color:var(--primary)]" : "border-border text-muted-foreground"}`}>{a}</button>
           ))}
         </div>
         <button
@@ -78,7 +78,7 @@ export default function OgBuilder() {
             const a = document.createElement("a");
             a.href = url; a.download = "og-image.png"; a.click();
           }}
-          className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[image:var(--gradient-neon)] px-4 py-2.5 text-sm font-semibold text-[color:var(--primary-foreground)] hover:opacity-90"
+          className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[color:var(--primary)] px-4 py-2.5 text-sm font-semibold text-[color:var(--primary-foreground)] hover:opacity-90"
         >
           <Download className="h-4 w-4" /> Export PNG (1200×630)
         </button>
@@ -86,14 +86,14 @@ export default function OgBuilder() {
 
       <div className="space-y-4 lg:col-span-3">
         <div className="glass p-5">
-          <h3 className="text-xs font-semibold uppercase tracking-wider text-[color:var(--neon-blue)]">Preview</h3>
+          <h3 className="text-xs font-semibold uppercase tracking-wider text-[color:var(--primary)]">Preview</h3>
           <canvas ref={canvasRef} width={1200} height={630} className="mt-3 w-full rounded-xl border border-border" />
         </div>
         <div className="glass p-5">
           <div className="flex items-center justify-between">
-            <h3 className="text-xs font-semibold uppercase tracking-wider text-[color:var(--neon-blue)]">Meta tags</h3>
+            <h3 className="text-xs font-semibold uppercase tracking-wider text-[color:var(--primary)]">Meta tags</h3>
             <button onClick={() => { navigator.clipboard.writeText(snippet); setCopied(true); setTimeout(() => setCopied(false), 1500); }} className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-surface px-3 py-1.5 text-xs font-semibold hover:bg-surface-2">
-              {copied ? <Check className="h-3.5 w-3.5 text-[color:var(--neon-green)]" /> : <Copy className="h-3.5 w-3.5" />}{copied ? "Copied" : "Copy"}
+              {copied ? <Check className="h-3.5 w-3.5 text-[color:var(--primary)]" /> : <Copy className="h-3.5 w-3.5" />}{copied ? "Copied" : "Copy"}
             </button>
           </div>
           <pre className="mt-2 overflow-x-auto rounded-lg bg-surface p-3 font-mono text-[11px] leading-relaxed">{snippet}</pre>

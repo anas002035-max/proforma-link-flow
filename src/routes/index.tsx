@@ -65,8 +65,8 @@ function Landing() {
 
 function FeatureCard({ icon, title, desc }: { icon: React.ReactNode; title: string; desc: string }) {
   return (
-    <div className="glass p-6 text-left hover:translate-y-[-2px] hover:shadow-[var(--glow-blue)]">
-      <div className="grid h-10 w-10 place-items-center rounded-lg bg-surface-2 text-[color:var(--neon-blue)]">
+    <div className="glass p-6 text-left hover:translate-y-[-2px] hover:shadow-[var(--shadow-soft)]">
+      <div className="grid h-10 w-10 place-items-center rounded-lg bg-surface-2 text-[color:var(--primary)]">
         {icon}
       </div>
       <h3 className="mt-4 text-base font-semibold">{title}</h3>

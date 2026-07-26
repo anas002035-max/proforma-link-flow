@@ -29,8 +29,8 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
-  --color-neon-blue: var(--neon-blue);
-  --color-neon-green: var(--neon-green);
+  --color-neon-blue: var(--primary);
+  --color-neon-green: var(--primary);
   --color-surface: var(--surface);
   --color-surface-2: var(--surface-2);
 }

@@ -19,7 +19,7 @@ function NotFoundComponent() {
   return (
     <div className="flex min-h-screen items-center justify-center px-4">
       <div className="glass max-w-md p-10 text-center">
-        <h1 className="text-6xl font-black tracking-tight text-foreground">404</h1>
+        <h1 className="text-6xl font-semibold tracking-tight text-foreground">404</h1>
         <p className="mt-3 text-sm text-muted-foreground">This page slipped through the routing engine.</p>
         <Link to="/" className="mt-6 inline-flex rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:opacity-90">
           Back home

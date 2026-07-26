@@ -74,17 +74,17 @@ export default function I18nValidator() {
         <div className="mb-4 inline-flex rounded-lg border border-border bg-surface/60 p-1 text-xs font-semibold">
           <button
             onClick={() => setMode("files")}
-            className={`rounded-md px-3 py-1.5 transition-colors duration-200 ${mode === "files" ? "bg-[image:var(--gradient-neon)] text-[color:var(--primary-foreground)]" : "text-muted-foreground hover:text-foreground"}`}
+            className={`rounded-md px-3 py-1.5 transition-colors duration-200 ${mode === "files" ? "bg-[color:var(--primary)] text-[color:var(--primary-foreground)]" : "text-muted-foreground hover:text-foreground"}`}
           >Drop files</button>
           <button
             onClick={() => setMode("paste")}
-            className={`rounded-md px-3 py-1.5 transition-colors duration-200 ${mode === "paste" ? "bg-[image:var(--gradient-neon)] text-[color:var(--primary-foreground)]" : "text-muted-foreground hover:text-foreground"}`}
+            className={`rounded-md px-3 py-1.5 transition-colors duration-200 ${mode === "paste" ? "bg-[color:var(--primary)] text-[color:var(--primary-foreground)]" : "text-muted-foreground hover:text-foreground"}`}
           >Paste JSON texts instead</button>
         </div>
 
         {mode === "files" ? (
-          <label className="flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-border bg-surface/40 p-10 text-center hover:border-[color:var(--neon-blue)]">
-            <Upload className="h-6 w-6 text-[color:var(--neon-blue)]" />
+          <label className="flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-border bg-surface/40 p-10 text-center hover:border-[color:var(--primary)]">
+            <Upload className="h-6 w-6 text-[color:var(--primary)]" />
             <span className="text-sm font-semibold">Drop locale JSON files</span>
             <span className="text-xs text-muted-foreground">en.json, fr.json, ja.json … multiple files supported</span>
             <input type="file" accept="application/json,.json" multiple className="hidden" onChange={(e) => onFiles(e.target.files)} />
@@ -96,20 +96,20 @@ export default function I18nValidator() {
                 <span className="text-xs font-semibold text-muted-foreground">Baseline JSON (e.g. en)</span>
                 <textarea
                   value={baseText} onChange={(e) => setBaseText(e.target.value)} rows={12} spellCheck={false}
-                  className="mt-1 w-full resize-y rounded-lg border border-input bg-surface p-3 font-mono text-[11px] leading-relaxed outline-none focus:border-[color:var(--neon-blue)]"
+                  className="mt-1 w-full resize-y rounded-lg border border-input bg-surface p-3 font-mono text-[11px] leading-relaxed outline-none focus:border-[color:var(--primary)]"
                 />
               </label>
               <label className="block">
                 <span className="text-xs font-semibold text-muted-foreground">Target JSON (e.g. fr)</span>
                 <textarea
                   value={targetText} onChange={(e) => setTargetText(e.target.value)} rows={12} spellCheck={false}
-                  className="mt-1 w-full resize-y rounded-lg border border-input bg-surface p-3 font-mono text-[11px] leading-relaxed outline-none focus:border-[color:var(--neon-blue)]"
+                  className="mt-1 w-full resize-y rounded-lg border border-input bg-surface p-3 font-mono text-[11px] leading-relaxed outline-none focus:border-[color:var(--primary)]"
                 />
               </label>
             </div>
             <button
               onClick={validatePasted}
-              className="rounded-lg bg-[image:var(--gradient-neon)] px-4 py-2 text-xs font-semibold text-[color:var(--primary-foreground)] transition-opacity duration-200 hover:opacity-90"
+              className="rounded-lg bg-[color:var(--primary)] px-4 py-2 text-xs font-semibold text-[color:var(--primary-foreground)] transition-opacity duration-200 hover:opacity-90"
             >
               Validate translations
             </button>
@@ -139,7 +139,7 @@ export default function I18nValidator() {
           <div key={r.name} className="glass p-5">
             <div className="flex items-center gap-2">
               {clean
-                ? <CheckCircle2 className="h-4 w-4 text-[color:var(--neon-green)]" />
+                ? <CheckCircle2 className="h-4 w-4 text-[color:var(--primary)]" />
                 : <AlertTriangle className="h-4 w-4 text-[color:var(--destructive)]" />}
               <h3 className="font-semibold">{r.name}</h3>
               <span className="text-xs text-muted-foreground">{clean ? "fully in sync" : `${r.missing.length + r.extra.length + r.empty.length + r.mismatched.length} issues`}</span>

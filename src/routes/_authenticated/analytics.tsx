@@ -21,7 +21,7 @@ function AnalyticsPage() {
   return (
     <div className="p-6 md:p-10">
       <header className="mb-8">
-        <h1 className="text-3xl font-black tracking-tight">Live analytics</h1>
+        <h1 className="text-3xl font-semibold tracking-tight">Live analytics</h1>
         <p className="text-sm text-muted-foreground">Traffic across all your smart links — refreshes every 30s.</p>
       </header>
 
@@ -51,9 +51,9 @@ function Stat({ label, value, icon }: { label: string; value: number | string; i
     <div className="glass p-5">
       <div className="flex items-center justify-between">
         <span className="text-xs uppercase tracking-wider text-muted-foreground">{label}</span>
-        <span className="text-[color:var(--neon-blue)]">{icon}</span>
+        <span className="text-[color:var(--primary)]">{icon}</span>
       </div>
-      <div className="mt-3 text-3xl font-black">{value}</div>
+      <div className="mt-3 text-3xl font-semibold">{value}</div>
     </div>
   );
 }
