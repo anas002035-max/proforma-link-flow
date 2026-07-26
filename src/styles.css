@@ -37,49 +37,52 @@
 
 :root {
   --radius: 0.875rem;
-  /* Deep charcoal/navy #0B0F19 */
-  --background: oklch(0.16 0.02 265);
-  --foreground: oklch(0.97 0.01 250);
-  --surface: oklch(0.21 0.024 265);
-  --surface-2: oklch(0.26 0.028 265);
-  --card: oklch(0.21 0.024 265 / 0.55);
-  --card-foreground: oklch(0.97 0.01 250);
-  --popover: oklch(0.19 0.024 265);
-  --popover-foreground: oklch(0.97 0.01 250);
-  --primary: oklch(0.78 0.17 220);
-  --primary-foreground: oklch(0.14 0.02 265);
-  --secondary: oklch(0.28 0.03 265);
-  --secondary-foreground: oklch(0.97 0.01 250);
-  --muted: oklch(0.24 0.025 265);
-  --muted-foreground: oklch(0.7 0.02 260);
-  --accent: oklch(0.85 0.2 155);
-  --accent-foreground: oklch(0.14 0.02 265);
-  --destructive: oklch(0.65 0.22 25);
-  --destructive-foreground: oklch(0.98 0.01 250);
-  --border: oklch(1 0 0 / 0.08);
-  --input: oklch(1 0 0 / 0.1);
-  --ring: oklch(0.78 0.17 220);
-  --neon-blue: oklch(0.78 0.19 230);
-  --neon-green: oklch(0.88 0.22 150);
-  --glow-blue: 0 0 24px oklch(0.78 0.19 230 / 0.55), 0 0 60px oklch(0.78 0.19 230 / 0.25);
-  --glow-green: 0 0 24px oklch(0.88 0.22 150 / 0.5), 0 0 60px oklch(0.88 0.22 150 / 0.22);
-  --gradient-bento: linear-gradient(135deg, oklch(1 0 0 / 0.06), oklch(1 0 0 / 0.01));
-  --gradient-neon: linear-gradient(135deg, oklch(0.78 0.19 230), oklch(0.88 0.22 150));
+  /* Minimalist Luxury Light — slate-50 canvas, pure white cards, indigo accents */
+  --background: oklch(0.985 0.002 265);
+  --foreground: oklch(0.24 0.02 265);
+  --surface: oklch(1 0 0);
+  --surface-2: oklch(0.968 0.004 265);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.24 0.02 265);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.24 0.02 265);
+  --primary: oklch(0.52 0.19 274);
+  --primary-foreground: oklch(0.99 0 0);
+  --secondary: oklch(0.962 0.006 274);
+  --secondary-foreground: oklch(0.32 0.03 274);
+  --muted: oklch(0.965 0.004 265);
+  --muted-foreground: oklch(0.55 0.018 265);
+  --accent: oklch(0.94 0.03 274);
+  --accent-foreground: oklch(0.4 0.12 274);
+  --destructive: oklch(0.58 0.2 25);
+  --destructive-foreground: oklch(0.99 0 0);
+  --border: oklch(0.24 0.02 265 / 0.09);
+  --input: oklch(0.24 0.02 265 / 0.14);
+  --ring: oklch(0.52 0.19 274);
+  /* legacy accent aliases, now indigo-family */
+  --neon-blue: oklch(0.52 0.19 274);
+  --neon-green: oklch(0.55 0.13 200);
+  --glow-blue: 0 1px 2px oklch(0.24 0.02 265 / 0.05), 0 12px 28px -12px oklch(0.52 0.19 274 / 0.22);
+  --glow-green: 0 1px 2px oklch(0.24 0.02 265 / 0.05), 0 12px 28px -12px oklch(0.55 0.13 200 / 0.22);
+  --shadow-soft: 0 1px 2px oklch(0.24 0.02 265 / 0.04), 0 8px 24px -14px oklch(0.24 0.02 265 / 0.18);
+  --shadow-lift: 0 2px 6px oklch(0.24 0.02 265 / 0.05), 0 20px 44px -22px oklch(0.24 0.02 265 / 0.25);
+  --gradient-bento: linear-gradient(180deg, oklch(1 0 0), oklch(1 0 0));
+  --gradient-neon: linear-gradient(135deg, oklch(0.52 0.19 274), oklch(0.6 0.16 285));
 }
 
 @utility glass {
-  background: var(--gradient-bento), var(--card);
-  backdrop-filter: blur(14px);
+  background: var(--card);
   border: 1px solid var(--border);
   border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-soft);
 }
 
 @utility neon-ring {
-  box-shadow: var(--glow-blue);
+  box-shadow: var(--shadow-lift);
 }
 
 @utility neon-ring-green {
-  box-shadow: var(--glow-green);
+  box-shadow: var(--shadow-lift);
 }
 
 @layer base {
@@ -89,13 +92,10 @@
   html, body {
     background-color: var(--color-background);
     color: var(--color-foreground);
-    color-scheme: dark;
+    color-scheme: light;
   }
   body {
-    background-image:
-      radial-gradient(60% 40% at 10% 0%, oklch(0.78 0.19 230 / 0.08), transparent 60%),
-      radial-gradient(50% 40% at 100% 20%, oklch(0.88 0.22 150 / 0.06), transparent 60%);
-    background-attachment: fixed;
+    -webkit-font-smoothing: antialiased;
   }
   * { transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease; }
 }
@@ -111,8 +111,8 @@
   color: var(--foreground);
   outline: none;
   &:focus {
-    border-color: var(--neon-blue);
-    box-shadow: 0 0 0 1px var(--neon-blue);
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px oklch(0.52 0.19 274 / 0.14);
   }
   &::placeholder { color: var(--muted-foreground); }
 }
