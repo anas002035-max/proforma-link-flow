@@ -60,15 +60,15 @@ function PublicBio() {
         <div className="mt-7 space-y-3">
 
           {(blocks as Array<{ id: string; block_type: string; data: Record<string, unknown> }>).map((b) => {
-            if (b.block_type === "header") return <div key={b.id} className="pt-3 text-xs font-bold uppercase tracking-wider text-muted-foreground">{String(b.data.text)}</div>;
+            if (b.block_type === "header") return <div key={b.id} className="pt-3 text-xs font-semibold uppercase tracking-wider opacity-60">{String(b.data.text)}</div>;
             if (b.block_type === "coupon") {
               const exp = b.data.expires_at ? new Date(String(b.data.expires_at)) : null;
               const expired = exp && exp.getTime() < Date.now();
               return (
-                <div key={b.id} className={`glass p-4 ${expired ? "opacity-50" : "hover:translate-y-[-2px]"}`}>
-                  <div className="text-[10px] uppercase text-muted-foreground">{expired ? "Expired" : "Coupon"}</div>
-                  <div className="text-2xl font-black tracking-widest text-[color:var(--neon-green)]">{String(b.data.code)}</div>
-                  <div className="text-xs text-muted-foreground">{String(b.data.description)}</div>
+                <div key={b.id} className={`rounded-2xl border p-4 ${expired ? "opacity-50" : ""}`} style={{ borderColor: `${fg}1f`, background: `${fg}08` }}>
+                  <div className="text-[10px] uppercase opacity-60">{expired ? "Expired" : "Coupon"}</div>
+                  <div className="text-2xl font-semibold tracking-widest" style={{ color: accent }}>{String(b.data.code)}</div>
+                  <div className="text-xs opacity-70">{String(b.data.description)}</div>
                 </div>
               );
             }
@@ -77,11 +77,12 @@ function PublicBio() {
               : String(b.data.url);
             const label = b.block_type === "social" ? `@${b.data.handle}` : String(b.data.label);
             return (
-              <a key={b.id} href={url} target="_blank" rel="noreferrer" className="glass block px-5 py-4 text-center font-medium hover:translate-y-[-2px] hover:shadow-[var(--glow-blue)]">
+              <a key={b.id} href={url} target="_blank" rel="noreferrer" className="block rounded-2xl border px-5 py-4 text-center text-sm font-medium hover:translate-y-[-2px]" style={{ borderColor: `${fg}1f`, background: `${fg}08` }}>
                 {label}
               </a>
             );
           })}
+
         </div>
       </div>
     </div>
