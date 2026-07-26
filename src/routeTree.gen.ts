@@ -11,14 +11,15 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as ExpiredRouteImport } from './routes/expired'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as ToolsRouteRouteImport } from './routes/tools/route'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ToolsIndexRouteImport } from './routes/tools/index'
+import { Route as ToolsSlugRouteImport } from './routes/tools/$slug'
 import { Route as BSlugRouteImport } from './routes/b.$slug'
-import { Route as AuthenticatedSeoRouteImport } from './routes/_authenticated/seo'
 import { Route as AuthenticatedQrRouteImport } from './routes/_authenticated/qr'
 import { Route as AuthenticatedLinksRouteImport } from './routes/_authenticated/links'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
-import { Route as AuthenticatedCalculatorsRouteImport } from './routes/_authenticated/calculators'
 import { Route as AuthenticatedBioRouteImport } from './routes/_authenticated/bio'
 import { Route as AuthenticatedBillingRouteImport } from './routes/_authenticated/billing'
 import { Route as AuthenticatedAnalyticsRouteImport } from './routes/_authenticated/analytics'
@@ -35,6 +36,11 @@ const AuthRoute = AuthRouteImport.update({
   path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ToolsRouteRoute = ToolsRouteRouteImport.update({
+  id: '/tools',
+  path: '/tools',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
   id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
@@ -44,15 +50,20 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ToolsIndexRoute = ToolsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => ToolsRouteRoute,
+} as any)
+const ToolsSlugRoute = ToolsSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => ToolsRouteRoute,
+} as any)
 const BSlugRoute = BSlugRouteImport.update({
   id: '/b/$slug',
   path: '/b/$slug',
   getParentRoute: () => rootRouteImport,
-} as any)
-const AuthenticatedSeoRoute = AuthenticatedSeoRouteImport.update({
-  id: '/seo',
-  path: '/seo',
-  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedQrRoute = AuthenticatedQrRouteImport.update({
   id: '/qr',
@@ -69,12 +80,6 @@ const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
-const AuthenticatedCalculatorsRoute =
-  AuthenticatedCalculatorsRouteImport.update({
-    id: '/calculators',
-    path: '/calculators',
-    getParentRoute: () => AuthenticatedRouteRoute,
-  } as any)
 const AuthenticatedBioRoute = AuthenticatedBioRouteImport.update({
   id: '/bio',
   path: '/bio',
@@ -103,17 +108,18 @@ const ApiPublicRSlugRoute = ApiPublicRSlugRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/tools': typeof ToolsRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/expired': typeof ExpiredRoute
   '/analytics': typeof AuthenticatedAnalyticsRoute
   '/billing': typeof AuthenticatedBillingRoute
   '/bio': typeof AuthenticatedBioRoute
-  '/calculators': typeof AuthenticatedCalculatorsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/links': typeof AuthenticatedLinksRouteWithChildren
   '/qr': typeof AuthenticatedQrRoute
-  '/seo': typeof AuthenticatedSeoRoute
   '/b/$slug': typeof BSlugRoute
+  '/tools/$slug': typeof ToolsSlugRoute
+  '/tools/': typeof ToolsIndexRoute
   '/links/$id': typeof AuthenticatedLinksIdRoute
   '/api/public/r/$slug': typeof ApiPublicRSlugRoute
 }
@@ -124,12 +130,12 @@ export interface FileRoutesByTo {
   '/analytics': typeof AuthenticatedAnalyticsRoute
   '/billing': typeof AuthenticatedBillingRoute
   '/bio': typeof AuthenticatedBioRoute
-  '/calculators': typeof AuthenticatedCalculatorsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/links': typeof AuthenticatedLinksRouteWithChildren
   '/qr': typeof AuthenticatedQrRoute
-  '/seo': typeof AuthenticatedSeoRoute
   '/b/$slug': typeof BSlugRoute
+  '/tools/$slug': typeof ToolsSlugRoute
+  '/tools': typeof ToolsIndexRoute
   '/links/$id': typeof AuthenticatedLinksIdRoute
   '/api/public/r/$slug': typeof ApiPublicRSlugRoute
 }
@@ -137,17 +143,18 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/tools': typeof ToolsRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/expired': typeof ExpiredRoute
   '/_authenticated/analytics': typeof AuthenticatedAnalyticsRoute
   '/_authenticated/billing': typeof AuthenticatedBillingRoute
   '/_authenticated/bio': typeof AuthenticatedBioRoute
-  '/_authenticated/calculators': typeof AuthenticatedCalculatorsRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/links': typeof AuthenticatedLinksRouteWithChildren
   '/_authenticated/qr': typeof AuthenticatedQrRoute
-  '/_authenticated/seo': typeof AuthenticatedSeoRoute
   '/b/$slug': typeof BSlugRoute
+  '/tools/$slug': typeof ToolsSlugRoute
+  '/tools/': typeof ToolsIndexRoute
   '/_authenticated/links/$id': typeof AuthenticatedLinksIdRoute
   '/api/public/r/$slug': typeof ApiPublicRSlugRoute
 }
@@ -155,17 +162,18 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/tools'
     | '/auth'
     | '/expired'
     | '/analytics'
     | '/billing'
     | '/bio'
-    | '/calculators'
     | '/dashboard'
     | '/links'
     | '/qr'
-    | '/seo'
     | '/b/$slug'
+    | '/tools/$slug'
+    | '/tools/'
     | '/links/$id'
     | '/api/public/r/$slug'
   fileRoutesByTo: FileRoutesByTo
@@ -176,29 +184,30 @@ export interface FileRouteTypes {
     | '/analytics'
     | '/billing'
     | '/bio'
-    | '/calculators'
     | '/dashboard'
     | '/links'
     | '/qr'
-    | '/seo'
     | '/b/$slug'
+    | '/tools/$slug'
+    | '/tools'
     | '/links/$id'
     | '/api/public/r/$slug'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
+    | '/tools'
     | '/auth'
     | '/expired'
     | '/_authenticated/analytics'
     | '/_authenticated/billing'
     | '/_authenticated/bio'
-    | '/_authenticated/calculators'
     | '/_authenticated/dashboard'
     | '/_authenticated/links'
     | '/_authenticated/qr'
-    | '/_authenticated/seo'
     | '/b/$slug'
+    | '/tools/$slug'
+    | '/tools/'
     | '/_authenticated/links/$id'
     | '/api/public/r/$slug'
   fileRoutesById: FileRoutesById
@@ -206,6 +215,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  ToolsRouteRoute: typeof ToolsRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
   ExpiredRoute: typeof ExpiredRoute
   BSlugRoute: typeof BSlugRoute
@@ -228,6 +238,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/tools': {
+      id: '/tools'
+      path: '/tools'
+      fullPath: '/tools'
+      preLoaderRoute: typeof ToolsRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated': {
       id: '/_authenticated'
       path: ''
@@ -242,19 +259,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/tools/': {
+      id: '/tools/'
+      path: '/'
+      fullPath: '/tools/'
+      preLoaderRoute: typeof ToolsIndexRouteImport
+      parentRoute: typeof ToolsRouteRoute
+    }
+    '/tools/$slug': {
+      id: '/tools/$slug'
+      path: '/$slug'
+      fullPath: '/tools/$slug'
+      preLoaderRoute: typeof ToolsSlugRouteImport
+      parentRoute: typeof ToolsRouteRoute
+    }
     '/b/$slug': {
       id: '/b/$slug'
       path: '/b/$slug'
       fullPath: '/b/$slug'
       preLoaderRoute: typeof BSlugRouteImport
       parentRoute: typeof rootRouteImport
-    }
-    '/_authenticated/seo': {
-      id: '/_authenticated/seo'
-      path: '/seo'
-      fullPath: '/seo'
-      preLoaderRoute: typeof AuthenticatedSeoRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/qr': {
       id: '/_authenticated/qr'
@@ -275,13 +299,6 @@ declare module '@tanstack/react-router' {
       path: '/dashboard'
       fullPath: '/dashboard'
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/calculators': {
-      id: '/_authenticated/calculators'
-      path: '/calculators'
-      fullPath: '/calculators'
-      preLoaderRoute: typeof AuthenticatedCalculatorsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/bio': {
@@ -337,30 +354,41 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedAnalyticsRoute: typeof AuthenticatedAnalyticsRoute
   AuthenticatedBillingRoute: typeof AuthenticatedBillingRoute
   AuthenticatedBioRoute: typeof AuthenticatedBioRoute
-  AuthenticatedCalculatorsRoute: typeof AuthenticatedCalculatorsRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedLinksRoute: typeof AuthenticatedLinksRouteWithChildren
   AuthenticatedQrRoute: typeof AuthenticatedQrRoute
-  AuthenticatedSeoRoute: typeof AuthenticatedSeoRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAnalyticsRoute: AuthenticatedAnalyticsRoute,
   AuthenticatedBillingRoute: AuthenticatedBillingRoute,
   AuthenticatedBioRoute: AuthenticatedBioRoute,
-  AuthenticatedCalculatorsRoute: AuthenticatedCalculatorsRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedLinksRoute: AuthenticatedLinksRouteWithChildren,
   AuthenticatedQrRoute: AuthenticatedQrRoute,
-  AuthenticatedSeoRoute: AuthenticatedSeoRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
   AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
 
+interface ToolsRouteRouteChildren {
+  ToolsSlugRoute: typeof ToolsSlugRoute
+  ToolsIndexRoute: typeof ToolsIndexRoute
+}
+
+const ToolsRouteRouteChildren: ToolsRouteRouteChildren = {
+  ToolsSlugRoute: ToolsSlugRoute,
+  ToolsIndexRoute: ToolsIndexRoute,
+}
+
+const ToolsRouteRouteWithChildren = ToolsRouteRoute._addFileChildren(
+  ToolsRouteRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  ToolsRouteRoute: ToolsRouteRouteWithChildren,
   AuthRoute: AuthRoute,
   ExpiredRoute: ExpiredRoute,
   BSlugRoute: BSlugRoute,

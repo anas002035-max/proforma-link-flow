@@ -99,3 +99,20 @@
   }
   * { transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease; }
 }
+
+@utility input {
+  width: 100%;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--input);
+  background: var(--surface);
+  padding: 0.5rem 0.75rem;
+  font-size: 0.8125rem;
+  line-height: 1.25rem;
+  color: var(--foreground);
+  outline: none;
+  &:focus {
+    border-color: var(--neon-blue);
+    box-shadow: 0 0 0 1px var(--neon-blue);
+  }
+  &::placeholder { color: var(--muted-foreground); }
+}

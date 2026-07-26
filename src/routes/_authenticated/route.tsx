@@ -1,6 +1,8 @@
 import { createFileRoute, Outlet, redirect, Link, useNavigate } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
-import { LayoutDashboard, Link2, QrCode, LogOut, Zap, Calculator, Search, CreditCard, BarChart3 } from "lucide-react";
+import { LayoutDashboard, Link2, QrCode, LogOut, Zap, Wrench, CreditCard, BarChart3 } from "lucide-react";
+import { LanguageSwitcher } from "@/components/language-switcher";
+import { useI18n } from "@/lib/i18n";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated")({
@@ -15,6 +17,7 @@ export const Route = createFileRoute("/_authenticated")({
 
 function AuthedLayout() {
   const navigate = useNavigate();
+  const { t } = useI18n();
   const { queryClient } = Route.useRouteContext();
 
   async function signOut() {
@@ -34,26 +37,26 @@ function AuthedLayout() {
           </div>
           <span className="font-black tracking-tight">Proforma</span>
         </Link>
-        <div className="mb-2 px-3 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/70">Core tools</div>
+        <div className="mb-2 px-3 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/70">{t("nav.core")}</div>
         <nav className="flex flex-col gap-1">
-          <NavItem to="/dashboard" icon={<LayoutDashboard className="h-4 w-4" />}>Dashboard</NavItem>
-          <NavItem to="/links" icon={<Link2 className="h-4 w-4" />}>Smart Links</NavItem>
-          <NavItem to="/qr" icon={<QrCode className="h-4 w-4" />}>QR Codes</NavItem>
-          <NavItem to="/bio" icon={<Zap className="h-4 w-4" />}>Bio Page</NavItem>
-          <NavItem to="/analytics" icon={<BarChart3 className="h-4 w-4" />}>Analytics</NavItem>
+          <NavItem to="/dashboard" icon={<LayoutDashboard className="h-4 w-4" />}>{t("nav.dashboard")}</NavItem>
+          <NavItem to="/links" icon={<Link2 className="h-4 w-4" />}>{t("nav.links")}</NavItem>
+          <NavItem to="/qr" icon={<QrCode className="h-4 w-4" />}>{t("nav.qr")}</NavItem>
+          <NavItem to="/bio" icon={<Zap className="h-4 w-4" />}>{t("nav.bio")}</NavItem>
         </nav>
-        <div className="mt-6 mb-2 px-3 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/70">Utilities</div>
+        <div className="mt-6 mb-2 px-3 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/70">{t("nav.utilities")}</div>
         <nav className="flex flex-col gap-1">
-          <NavItem to="/calculators" icon={<Calculator className="h-4 w-4" />}>Calculators</NavItem>
-          <NavItem to="/seo" icon={<Search className="h-4 w-4" />}>SEO Toolkit</NavItem>
+          <NavItem to="/analytics" icon={<BarChart3 className="h-4 w-4" />}>{t("nav.analytics")}</NavItem>
+          <NavItem to="/tools" icon={<Wrench className="h-4 w-4" />}>{t("nav.tools")}</NavItem>
         </nav>
-        <div className="mt-6 mb-2 px-3 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/70">Account</div>
+        <div className="mt-6 mb-2 px-3 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/70">{t("nav.account")}</div>
         <nav className="flex flex-col gap-1">
-          <NavItem to="/billing" icon={<CreditCard className="h-4 w-4" />}>Billing & Plans</NavItem>
+          <NavItem to="/billing" icon={<CreditCard className="h-4 w-4" />}>{t("nav.billing")}</NavItem>
         </nav>
+        <div className="mt-6 px-1"><LanguageSwitcher /></div>
         <div className="mt-auto flex flex-col gap-1 pt-4">
           <button onClick={signOut} className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-muted-foreground hover:bg-surface hover:text-foreground">
-            <LogOut className="h-4 w-4" /> Sign out
+            <LogOut className="h-4 w-4" /> {t("nav.signout")}
           </button>
         </div>
       </aside>
