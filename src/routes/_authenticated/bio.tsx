@@ -57,7 +57,7 @@ function BioBuilder() {
     const saved = (data.page.theme ?? null) as { bg?: string } | null;
     if (saved?.bg) {
       const match = THEME_COLORS.find((c) => c.bg === saved.bg);
-      setTheme(match ?? { name: "Custom", bg: saved.bg, fg: (saved as { fg?: string }).fg ?? "#1e293b", accent: (saved as { accent?: string }).accent ?? "#4f46e5" });
+      setTheme(match ?? { name: "Custom", bg: saved.bg, fg: readableFg(saved.bg), accent: (saved as { accent?: string }).accent ?? "#6366f1" });
     }
     setBlocks((data.blocks as Block[]) ?? []);
   }, [data]);
@@ -186,7 +186,7 @@ function BioBuilder() {
                 </button>
               ))}
               <label className="grid h-11 w-11 cursor-pointer place-items-center rounded-full border-2 border-dashed border-border text-[10px] text-muted-foreground">
-                <input type="color" value={theme.bg} onChange={(e) => setTheme({ name: "Custom", bg: e.target.value, fg: "#1e293b", accent: "#4f46e5" })} className="h-0 w-0 opacity-0" />
+                <input type="color" value={theme.bg} onChange={(e) => setTheme({ name: "Custom", bg: e.target.value, fg: readableFg(e.target.value), accent: "#6366f1" })} className="h-0 w-0 opacity-0" />
                 +
               </label>
             </div>
@@ -292,4 +292,12 @@ function PreviewBlock({ block, theme }: { block: Block; theme: { fg: string; acc
       {label}
     </div>
   );
+}
+
+function readableFg(bg: string) {
+  const h = bg.replace("#", "");
+  if (h.length !== 6) return "#1e293b";
+  const [r, g, b] = [0, 2, 4].map((i) => parseInt(h.slice(i, i + 2), 16) / 255);
+  const lum = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+  return lum > 0.55 ? "#1e293b" : "#f8fafc";
 }

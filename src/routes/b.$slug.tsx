@@ -48,7 +48,7 @@ function PublicBio() {
   const { page, blocks } = Route.useLoaderData();
   const theme = (page.theme ?? null) as { bg?: string; fg?: string; accent?: string } | null;
   const bg = theme?.bg ?? "#f8fafc";
-  const fg = theme?.fg ?? "#1e293b";
+  const fg = theme?.fg ?? readableFg(bg);
   const accent = theme?.accent ?? "#4f46e5";
   return (
     <div className="flex min-h-screen flex-col items-center px-4 py-12" style={{ background: bg, color: fg }}>
@@ -99,4 +99,12 @@ function socialUrl(platform: string, handle: string) {
     case "linkedin": return `https://linkedin.com/in/${h}`;
     default: return "#";
   }
+}
+
+function readableFg(bg: string) {
+  const h = bg.replace("#", "");
+  if (h.length !== 6) return "#1e293b";
+  const [r, g, b] = [0, 2, 4].map((i) => parseInt(h.slice(i, i + 2), 16) / 255);
+  const lum = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+  return lum > 0.55 ? "#1e293b" : "#f8fafc";
 }
