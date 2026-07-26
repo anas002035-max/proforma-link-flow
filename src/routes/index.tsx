@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { QrCode, Link2, Globe2, Sparkles, ArrowRight, Zap } from "lucide-react";
+import { LanguageSwitcher } from "@/components/language-switcher";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -24,6 +25,8 @@ function Landing() {
           <span className="text-lg font-black tracking-tight">Proforma Hub</span>
         </div>
         <nav className="flex items-center gap-2">
+          <LanguageSwitcher />
+          <Link to="/tools" className="rounded-lg px-4 py-2 text-sm text-muted-foreground hover:text-foreground">Tools</Link>
           <Link to="/auth" className="rounded-lg px-4 py-2 text-sm text-muted-foreground hover:text-foreground">Sign in</Link>
           <Link to="/auth" className="rounded-lg bg-[image:var(--gradient-neon)] px-4 py-2 text-sm font-semibold text-[color:var(--primary-foreground)] hover:opacity-90">
             Get started
