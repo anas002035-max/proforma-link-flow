@@ -2,7 +2,7 @@ import { createFileRoute, Link, useRouteContext } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
 import { listMyLinks, getAllAnalytics } from "@/lib/links.functions";
-import { Link2, QrCode, MousePointerClick, TrendingUp, Plus, Calculator, Search, BarChart3 } from "lucide-react";
+import { Link2, QrCode, MousePointerClick, TrendingUp, Plus, Wrench, BarChart3 } from "lucide-react";
 import { TrafficLineChart, BreakdownPie } from "@/components/analytics-charts";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
@@ -89,8 +89,7 @@ function Dashboard() {
             <ToolLink to="/qr" icon={<QrCode className="h-4 w-4" />} label="Dynamic QR codes" />
             <ToolLink to="/bio" icon={<Link2 className="h-4 w-4" />} label="Bio page builder" />
             <ToolLink to="/analytics" icon={<BarChart3 className="h-4 w-4" />} label="Live analytics" />
-            <ToolLink to="/calculators" icon={<Calculator className="h-4 w-4" />} label="Calculator suite" />
-            <ToolLink to="/seo" icon={<Search className="h-4 w-4" />} label="SEO toolkit" />
+            <ToolLink to="/tools" icon={<Wrench className="h-4 w-4" />} label="Engineering tools" />
           </div>
         </div>
       </div>

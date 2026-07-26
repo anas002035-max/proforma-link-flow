@@ -1,6 +1,8 @@
 import { createFileRoute, Outlet, redirect, Link, useNavigate } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
-import { LayoutDashboard, Link2, QrCode, LogOut, Zap, Calculator, Search, CreditCard, BarChart3 } from "lucide-react";
+import { LayoutDashboard, Link2, QrCode, LogOut, Zap, Wrench, CreditCard, BarChart3 } from "lucide-react";
+import { LanguageSwitcher } from "@/components/language-switcher";
+import { useI18n } from "@/lib/i18n";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated")({
@@ -15,6 +17,7 @@ export const Route = createFileRoute("/_authenticated")({
 
 function AuthedLayout() {
   const navigate = useNavigate();
+  const { t } = useI18n();
   const { queryClient } = Route.useRouteContext();
 
   async function signOut() {
@@ -53,7 +56,7 @@ function AuthedLayout() {
         <div className="mt-6 px-1"><LanguageSwitcher /></div>
         <div className="mt-auto flex flex-col gap-1 pt-4">
           <button onClick={signOut} className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-muted-foreground hover:bg-surface hover:text-foreground">
-            <LogOut className="h-4 w-4" /> Sign out
+            <LogOut className="h-4 w-4" /> {t("nav.signout")}
           </button>
         </div>
       </aside>
