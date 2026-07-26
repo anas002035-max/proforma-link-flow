@@ -1,5 +1,5 @@
-import { useMemo, useRef, useState } from "react";
-import { Plus, Trash2, Copy, Check } from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { Plus, Trash2, Copy, Check, Wand2, AlertTriangle } from "lucide-react";
 
 type Column = { name: string; type: string; pk: boolean; nullable: boolean };
 type Table = { id: string; name: string; x: number; y: number; columns: Column[] };
