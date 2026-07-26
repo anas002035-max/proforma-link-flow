@@ -20,6 +20,23 @@ export default function I18nValidator() {
   const [files, setFiles] = useState<LocaleFile[]>([]);
   const [baseline, setBaseline] = useState<string>("");
   const [error, setError] = useState("");
+  const [mode, setMode] = useState<"files" | "paste">("files");
+  const [baseText, setBaseText] = useState('{\n  "app": { "title": "Proforma Hub", "cta": "Get started" }\n}');
+  const [targetText, setTargetText] = useState('{\n  "app": { "title": "Proforma Hub" }\n}');
+
+  function validatePasted() {
+    let baseJson: Record<string, unknown>;
+    let targetJson: Record<string, unknown>;
+    try { baseJson = JSON.parse(baseText); } catch { setError("Baseline JSON is invalid."); return; }
+    try { targetJson = JSON.parse(targetText); } catch { setError("Target JSON is invalid."); return; }
+    setError("");
+    setFiles([
+      { name: "baseline.json", json: baseJson },
+      { name: "target.json", json: targetJson },
+    ]);
+    setBaseline("baseline.json");
+  }
+
 
   async function onFiles(list: FileList | null) {
     if (!list) return;
