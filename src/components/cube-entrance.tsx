@@ -6,16 +6,37 @@ type Phase = "rolling" | "unfolding" | "revealed";
 const S = 116; // cube edge in px
 const H = S / 2;
 
-const FACES: { t: string; tint: string }[] = [
-  { t: `translateZ(${H}px)`, tint: "0.10" },
-  { t: `rotateY(180deg) translateZ(${H}px)`, tint: "0.14" },
-  { t: `rotateY(90deg) translateZ(${H}px)`, tint: "0.16" },
-  { t: `rotateY(-90deg) translateZ(${H}px)`, tint: "0.16" },
-  { t: `rotateX(90deg) translateZ(${H}px)`, tint: "0.07" },
-  { t: `rotateX(-90deg) translateZ(${H}px)`, tint: "0.2" },
+/** face transform + surface shading (lighting simulated per face orientation) */
+const FACES: { t: string; bg: string; gloss?: boolean }[] = [
+  {
+    t: `translateZ(${H}px)`,
+    bg: "linear-gradient(150deg, color-mix(in oklab, var(--primary) 22%, white), color-mix(in oklab, var(--primary) 8%, white))",
+    gloss: true,
+  },
+  {
+    t: `rotateY(180deg) translateZ(${H}px)`,
+    bg: "linear-gradient(150deg, color-mix(in oklab, var(--primary) 30%, white), color-mix(in oklab, var(--primary) 14%, white))",
+  },
+  {
+    t: `rotateY(90deg) translateZ(${H}px)`,
+    bg: "linear-gradient(120deg, color-mix(in oklab, var(--primary) 34%, white), color-mix(in oklab, var(--primary) 16%, white))",
+  },
+  {
+    t: `rotateY(-90deg) translateZ(${H}px)`,
+    bg: "linear-gradient(120deg, color-mix(in oklab, var(--primary) 16%, white), color-mix(in oklab, var(--primary) 34%, white))",
+  },
+  {
+    t: `rotateX(90deg) translateZ(${H}px)`,
+    bg: "linear-gradient(180deg, white, color-mix(in oklab, var(--primary) 10%, white))",
+    gloss: true,
+  },
+  {
+    t: `rotateX(-90deg) translateZ(${H}px)`,
+    bg: "linear-gradient(180deg, color-mix(in oklab, var(--primary) 42%, white), color-mix(in oklab, var(--primary) 26%, white))",
+  },
 ];
 
-/** Cinematic entrance: a 3D cube rolls in, stops, then unfolds flat to reveal its content. */
+/** Cinematic entrance: a shaded 3D cube tumbles in, stops, then unfolds flat to reveal its content. */
 export function CubeEntrance({ children }: { children: ReactNode }) {
   const reduced = useReducedMotion();
   const [phase, setPhase] = useState<Phase>(reduced ? "revealed" : "rolling");
@@ -48,22 +69,34 @@ export function CubeEntrance({ children }: { children: ReactNode }) {
           <motion.div
             className="relative"
             style={{ width: S, height: S, transformStyle: "preserve-3d", willChange: "transform" }}
-            initial={{ x: "-42vw", rotateZ: -10, rotateY: -18 }}
-            animate={{ x: 0, rotateZ: 540, rotateY: 0 }}
+            initial={{ x: "-42vw", rotateZ: -14, rotateY: -24, rotateX: -12 }}
+            animate={{ x: 0, rotateZ: 540, rotateY: 360, rotateX: 0 }}
             transition={{ duration: 2.1, ease: [0.16, 0.9, 0.2, 1] }}
             onAnimationComplete={() => setPhase("unfolding")}
           >
             {FACES.map((f, i) => (
               <div
                 key={i}
-                className="absolute inset-0 rounded-[14px] border border-[color:var(--primary)]/35"
+                className="absolute inset-0 overflow-hidden rounded-[14px] border border-[color:var(--primary)]/30"
                 style={{
                   transform: f.t,
-                  background: `color-mix(in oklab, var(--primary) ${Number(f.tint) * 100}%, white)`,
-                  boxShadow: "inset 0 0 22px color-mix(in oklab, var(--primary) 18%, transparent)",
+                  background: f.bg,
+                  boxShadow:
+                    "inset 0 1px 0 rgba(255,255,255,0.85), inset 0 0 26px color-mix(in oklab, var(--primary) 16%, transparent)",
                   backfaceVisibility: "hidden",
                 }}
-              />
+              >
+                {f.gloss && (
+                  <span
+                    aria-hidden
+                    className="absolute -inset-y-6 -left-4 w-1/2 rotate-[18deg]"
+                    style={{
+                      background:
+                        "linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,0.6), rgba(255,255,255,0))",
+                    }}
+                  />
+                )}
+              </div>
             ))}
           </motion.div>
 
@@ -100,10 +133,12 @@ export function CubeEntrance({ children }: { children: ReactNode }) {
                 className={`pointer-events-none absolute rounded-[14px] border border-[color:var(--primary)]/25 ${flap.cls}`}
                 style={{
                   transformOrigin: flap.origin,
-                  background: "color-mix(in oklab, var(--primary) 8%, white)",
+                  background:
+                    "linear-gradient(140deg, color-mix(in oklab, var(--primary) 16%, white), color-mix(in oklab, var(--primary) 5%, white))",
+                  boxShadow: "inset 0 1px 0 rgba(255,255,255,0.8)",
                   willChange: "transform",
                 }}
-                initial={{ [flap.axis]: flap.sign * 92, opacity: 0.9 }}
+                initial={{ [flap.axis]: flap.sign * 92, opacity: 0.95 }}
                 animate={{ [flap.axis]: 0, opacity: 0.16 }}
                 transition={{ duration: 0.62, delay: flap.delay, ease: [0.22, 1, 0.28, 1] }}
               />
