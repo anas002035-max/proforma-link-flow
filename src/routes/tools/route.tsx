@@ -1,7 +1,7 @@
 import { createFileRoute, Outlet, Link } from "@tanstack/react-router";
 import { BrandMark } from "@/components/brand-logo";
 import { LanguageSwitcher } from "@/components/language-switcher";
-import { DevProToggle } from "@/components/dev-pro-toggle";
+import { SquareTransitions } from "@/components/square-transitions";
 import { useI18n } from "@/lib/i18n";
 
 export const Route = createFileRoute("/tools")({
@@ -17,14 +17,15 @@ function ToolsLayout() {
           <Link to="/"><BrandMark /></Link>
           <div className="flex items-center gap-2">
             <LanguageSwitcher />
-            <DevProToggle />
             <Link to="/dashboard" className="rounded-lg border border-border bg-surface/60 px-3 py-1.5 text-xs font-semibold hover:bg-surface">
               {t("nav.dashboard")}
             </Link>
           </div>
         </div>
       </header>
-      <Outlet />
+      <SquareTransitions>
+        <Outlet />
+      </SquareTransitions>
     </div>
   );
 }
