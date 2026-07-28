@@ -83,7 +83,6 @@ export function CubeEntrance({ children }: { children: ReactNode }) {
         <motion.div
           className="relative w-full max-w-[400px] px-1"
           style={{ transformStyle: "preserve-3d" }}
-          initial={reduced ? false : { width: S, opacity: 1 }}
         >
           {/* unfolding flaps */}
           {!reduced &&

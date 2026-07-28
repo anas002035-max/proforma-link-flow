@@ -5,7 +5,7 @@ import { listMyLinks, getAllAnalytics } from "@/lib/links.functions";
 import { Link2, QrCode, MousePointerClick, TrendingUp, Plus } from "lucide-react";
 import { TrafficLineChart, BreakdownPie } from "@/components/analytics-charts";
 import { LanguageSwitcher } from "@/components/language-switcher";
-import { DevProToggle } from "@/components/dev-pro-toggle";
+
 import { ToolCategoryGrid } from "@/components/tool-category-grid";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
@@ -43,7 +43,7 @@ function Dashboard() {
         </div>
         <div className="flex flex-wrap items-center gap-2">
           <LanguageSwitcher />
-          <DevProToggle />
+          
           <Link to="/links" className="inline-flex items-center gap-2 rounded-xl bg-[color:var(--primary)] px-4 py-2 text-sm font-semibold text-[color:var(--primary-foreground)] hover:opacity-90">
             <Plus className="h-4 w-4" /> New smart link
           </Link>
