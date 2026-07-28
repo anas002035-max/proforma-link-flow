@@ -4,6 +4,7 @@ import { LayoutDashboard, Link2, QrCode, LogOut, UserSquare2, CreditCard, BarCha
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { BrandMark } from "@/components/brand-logo";
 import { SupportWidget } from "@/components/support-widget";
+import { SquareTransitions } from "@/components/square-transitions";
 import { useI18n } from "@/lib/i18n";
 import { toast } from "sonner";
 
@@ -72,7 +73,9 @@ function AuthedLayout() {
           <NavItem to="/qr" icon={<QrCode className="h-4 w-4" />}>QR</NavItem>
           <NavItem to="/bio" icon={<UserSquare2 className="h-4 w-4" />}>Bio</NavItem>
         </nav>
-        <Outlet />
+        <SquareTransitions>
+          <Outlet />
+        </SquareTransitions>
       </main>
     </div>
   );
