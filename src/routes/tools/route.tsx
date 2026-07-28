@@ -1,6 +1,7 @@
 import { createFileRoute, Outlet, Link } from "@tanstack/react-router";
 import { BrandMark } from "@/components/brand-logo";
 import { LanguageSwitcher } from "@/components/language-switcher";
+import { SquareTransitions } from "@/components/square-transitions";
 import { useI18n } from "@/lib/i18n";
 
 export const Route = createFileRoute("/tools")({
@@ -22,7 +23,9 @@ function ToolsLayout() {
           </div>
         </div>
       </header>
-      <Outlet />
+      <SquareTransitions>
+        <Outlet />
+      </SquareTransitions>
     </div>
   );
 }
